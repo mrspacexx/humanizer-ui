@@ -1,103 +1,170 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [inputText, setInputText] = useState("");
+  const [tone, setTone] = useState("friendly");
+  const [length, setLength] = useState("original");
+  const [creativity, setCreativity] = useState("medium");
+  const [result, setResult] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const handleSubmit = async () => {
+    setLoading(true);
+    setResult("");
+
+    try {
+const response = await fetch('https://9ixc8puccjppea-8000.proxy.runpod.net/humanize', {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            text: inputText,
+            tone,
+            length,
+            creativity,
+          }),
+        }
+      );
+
+      const data = await response.json();
+      setResult(data.result);
+    } catch (error) {
+      console.error("Error:", error);
+      setResult("⚠️ Bir hata oluştu. Sunucuya ulaşılamıyor.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(result);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+<main className="min-h-screen bg-grid-pattern bg-repeat bg-fixed text-foreground p-8">
+      <div className="max-w-6xl mx-auto">
+        <h1 className="text-4xl font-bold text-center mb-8 tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+          ✨ HumanoText
+        </h1>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          {/* Input Panel */}
+          <Card className="shadow-lg">
+            <CardContent className="p-6">
+              <label className="block mb-2 text-sm font-medium text-gray-700">
+                🎯 AI-Generated Text
+              </label>
+              <Textarea
+                rows={10}
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
+                placeholder="Paste your text here..."
+              />
+
+              {/* Tone */}
+              <div className="mt-4 space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
+                  🧠 Tone
+                </label>
+                <Select value={tone} onValueChange={setTone}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Choose tone..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="friendly">Friendly</SelectItem>
+                    <SelectItem value="formal">Formal</SelectItem>
+                    <SelectItem value="humorous">Humorous</SelectItem>
+                    <SelectItem value="warm">Warm</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Length */}
+              <div className="mt-4 space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
+                  📏 Length
+                </label>
+                <Select value={length} onValueChange={setLength}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Choose length..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="shorter">Shorter</SelectItem>
+                    <SelectItem value="original">Original</SelectItem>
+                    <SelectItem value="longer">Longer</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Creativity */}
+              <div className="mt-4 space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
+                  🎨 Creativity
+                </label>
+                <Select value={creativity} onValueChange={setCreativity}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Choose creativity..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="low">Low</SelectItem>
+                    <SelectItem value="medium">Medium</SelectItem>
+                    <SelectItem value="high">High</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <Button
+                onClick={handleSubmit}
+                disabled={loading}
+                className="mt-6 w-full transition-all duration-200 hover:scale-[1.02]"
+              >
+                {loading ? "⏳ Rewriting..." : "🔁 Rewrite"}
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Output Panel */}
+          <Card className="shadow-lg">
+            <CardContent className="p-6">
+              <label className="block mb-2 text-sm font-medium text-gray-700">
+                📝 Humanized Output
+              </label>
+              <div className="min-h-[10rem] bg-gray-50 p-4 rounded-md text-sm whitespace-pre-wrap border">
+                {result || "⚡️ Rewritten text will appear here."}
+              </div>
+
+              {result && (
+                <div className="mt-4 flex items-center justify-between">
+                  <Button
+                    onClick={handleCopy}
+                    variant="outline"
+                    className="text-sm transition-all duration-200 hover:scale-[1.02]"
+                  >
+                    📋 Copy
+                  </Button>
+                  {copied && (
+                    <span className="text-green-600 text-sm">✅ Copied!</span>
+                  )}
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      </div>
+    </main>
   );
 }
