@@ -32,24 +32,59 @@ export default function Home() {
   const [authError, setAuthError] = useState("");
 
   // Placeholder login handler
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setAuthError("");
-    // TODO: Connect to your backend/service here
-    // Example: fetch('/api/login', { ... })
-    setShowLogin(false);
+    try {
+      const res = await fetch("/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: loginEmail, password: loginPassword }),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        setAuthError(err.detail || "Login failed");
+        return;
+      }
+      // Başarılı giriş
+      setShowLogin(false);
+      setLoginEmail("");
+      setLoginPassword("");
+      setAuthError("");
+      // TODO: Token veya kullanıcı bilgisini burada saklayabilirsin
+    } catch (err) {
+      setAuthError("Login failed. Network error.");
+    }
   };
   // Placeholder signup handler
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
     setAuthError("");
     if (signupPassword !== signupConfirm) {
       setAuthError("Passwords do not match");
       return;
     }
-    // TODO: Connect to your backend/service here
-    // Example: fetch('/api/signup', { ... })
-    setShowSignup(false);
+    try {
+      const res = await fetch("/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: signupEmail, password: signupPassword }),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        setAuthError(err.detail || "Signup failed");
+        return;
+      }
+      // Başarılı kayıt
+      setShowSignup(false);
+      setSignupEmail("");
+      setSignupPassword("");
+      setSignupConfirm("");
+      setAuthError("");
+      // TODO: Otomatik giriş veya bilgi mesajı ekleyebilirsin
+    } catch (err) {
+      setAuthError("Signup failed. Network error.");
+    }
   };
 
   const handleSubmit = async () => {
