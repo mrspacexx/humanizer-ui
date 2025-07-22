@@ -39,7 +39,7 @@ export default function Home() {
     e.preventDefault();
     setAuthError("");
     try {
-      const res = await fetch("http://localhost:8000/login", {
+      const res = await fetch("https://9ixc8puccjppea-8000.proxy.runpod.net/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: loginEmail, password: loginPassword }),
@@ -72,7 +72,7 @@ export default function Home() {
       return;
     }
     try {
-      const res = await fetch("http://localhost:8000/signup", {
+      const res = await fetch("https://9ixc8puccjppea-8000.proxy.runpod.net/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: signupEmail, password: signupPassword }),
