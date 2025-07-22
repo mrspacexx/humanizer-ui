@@ -30,8 +30,11 @@ export default function Home() {
   const [signupPassword, setSignupPassword] = useState("");
   const [signupConfirm, setSignupConfirm] = useState("");
   const [authError, setAuthError] = useState("");
+  const [signupSuccess, setSignupSuccess] = useState(false);
+  const [loginSuccess, setLoginSuccess] = useState(false);
+  const [justSignedUp, setJustSignedUp] = useState(false);
 
-  // Placeholder login handler
+  // Login handler
   const handleLogin = async (e) => {
     e.preventDefault();
     setAuthError("");
@@ -46,17 +49,21 @@ export default function Home() {
         setAuthError(err.detail || "Login failed");
         return;
       }
-      // Başarılı giriş
       setShowLogin(false);
       setLoginEmail("");
       setLoginPassword("");
       setAuthError("");
-      // TODO: Token veya kullanıcı bilgisini burada saklayabilirsin
+      if (justSignedUp) {
+        setLoginSuccess(true);
+        setTimeout(() => setLoginSuccess(false), 4000);
+        setJustSignedUp(false);
+      }
+      // TODO: Token or user info can be stored here
     } catch (err) {
       setAuthError("Login failed. Network error.");
     }
   };
-  // Placeholder signup handler
+  // Signup handler
   const handleSignup = async (e) => {
     e.preventDefault();
     setAuthError("");
@@ -75,16 +82,30 @@ export default function Home() {
         setAuthError(err.detail || "Signup failed");
         return;
       }
-      // Başarılı kayıt
       setShowSignup(false);
       setSignupEmail("");
       setSignupPassword("");
       setSignupConfirm("");
       setAuthError("");
-      // TODO: Otomatik giriş veya bilgi mesajı ekleyebilirsin
+      setSignupSuccess(true);
+      setJustSignedUp(true);
+      setTimeout(() => setSignupSuccess(false), 6000);
+      // TODO: Auto-login or info message can be added here
     } catch (err) {
       setAuthError("Signup failed. Network error.");
     }
+  };
+
+  // Reset success messages when modals open
+  const openLogin = () => {
+    setShowLogin(true);
+    setSignupSuccess(false);
+    setLoginSuccess(false);
+  };
+  const openSignup = () => {
+    setShowSignup(true);
+    setSignupSuccess(false);
+    setLoginSuccess(false);
   };
 
   const handleSubmit = async () => {
@@ -133,12 +154,12 @@ export default function Home() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
           <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md relative">
             <button className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-xl" onClick={() => setShowLogin(false)}>&times;</button>
-            <h2 className="text-2xl font-bold mb-4 text-gray-800">Login</h2>
+            <h2 className="text-2xl font-bold mb-4 text-gray-800">Log In</h2>
             <form onSubmit={handleLogin} className="flex flex-col gap-4">
               <input type="email" required placeholder="Email" value={loginEmail} onChange={e => setLoginEmail(e.target.value)} className="border border-gray-300 rounded px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-200" />
               <input type="password" required placeholder="Password" value={loginPassword} onChange={e => setLoginPassword(e.target.value)} className="border border-gray-300 rounded px-4 py-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-200" />
               {authError && <div className="text-red-600 text-sm">{authError}</div>}
-              <button type="submit" className="w-full px-4 py-2 rounded bg-blue-600 text-white font-semibold hover:bg-blue-700 transition">Login</button>
+              <button type="submit" className="w-full px-4 py-2 rounded bg-blue-600 text-white font-semibold hover:bg-blue-700 transition">Log In</button>
             </form>
             <div className="mt-4 text-sm text-center text-gray-500">
               Don't have an account? <button className="text-blue-600 hover:underline" onClick={() => { setShowLogin(false); setShowSignup(true); }}>Sign Up</button>
@@ -160,9 +181,21 @@ export default function Home() {
               <button type="submit" className="w-full px-4 py-2 rounded bg-blue-600 text-white font-semibold hover:bg-blue-700 transition">Sign Up</button>
             </form>
             <div className="mt-4 text-sm text-center text-gray-500">
-              Already have an account? <button className="text-blue-600 hover:underline" onClick={() => { setShowSignup(false); setShowLogin(true); }}>Login</button>
+              Already have an account? <button className="text-blue-600 hover:underline" onClick={() => { setShowSignup(false); setShowLogin(true); }}>Log In</button>
             </div>
           </div>
+        </div>
+      )}
+      {/* Success Messages */}
+      {signupSuccess && (
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 bg-green-100 border border-green-400 text-green-700 px-6 py-3 rounded shadow z-50 flex items-center gap-4">
+          Registration successful! You can now log in.
+          <button className="ml-2 text-blue-600 underline" onClick={() => { setShowLogin(true); setSignupSuccess(false); }}>Log In</button>
+        </div>
+      )}
+      {loginSuccess && (
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 bg-green-100 border border-green-400 text-green-700 px-6 py-3 rounded shadow z-50 flex items-center gap-4">
+          Login successful!
         </div>
       )}
       {/* Navigation Bar */}
@@ -180,8 +213,8 @@ export default function Home() {
         </div>
         {/* Desktop Auth Buttons */}
         <div className="hidden md:flex items-center gap-2">
-          <button className="px-4 py-1.5 rounded-md border border-blue-600 text-blue-600 font-semibold bg-white hover:bg-blue-50 transition" onClick={() => setShowLogin(true)}>Login</button>
-          <button className="px-4 py-1.5 rounded-md bg-blue-600 text-white font-semibold hover:bg-blue-700 transition" onClick={() => setShowSignup(true)}>Sign Up</button>
+          <button className="px-4 py-1.5 rounded-md border border-blue-600 text-blue-600 font-semibold bg-white hover:bg-blue-50 transition" onClick={openLogin}>Log In</button>
+          <button className="px-4 py-1.5 rounded-md bg-blue-600 text-white font-semibold hover:bg-blue-700 transition" onClick={openSignup}>Sign Up</button>
         </div>
         {/* Mobile Hamburger */}
         <button className="md:hidden flex items-center p-2 rounded hover:bg-gray-100" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
@@ -197,7 +230,7 @@ export default function Home() {
             <button onClick={() => { setActiveTab('Pricing'); setMobileMenuOpen(false); }} className={`text-gray-700 font-medium hover:text-blue-700 transition w-full ${activeTab === 'Pricing' ? 'text-blue-700 underline underline-offset-4' : ''}`}>Pricing</button>
             <button onClick={() => { setActiveTab('Contact'); setMobileMenuOpen(false); }} className={`text-gray-700 font-medium hover:text-blue-700 transition w-full ${activeTab === 'Contact' ? 'text-blue-700 underline underline-offset-4' : ''}`}>Contact</button>
             <div className="flex gap-2 w-full mt-2">
-              <button className="flex-1 px-4 py-1.5 rounded-md border border-blue-600 text-blue-600 font-semibold bg-white hover:bg-blue-50 transition" onClick={() => { setShowLogin(true); setMobileMenuOpen(false); }}>Login</button>
+              <button className="flex-1 px-4 py-1.5 rounded-md border border-blue-600 text-blue-600 font-semibold bg-white hover:bg-blue-50 transition" onClick={() => { setShowLogin(true); setMobileMenuOpen(false); }}>Log In</button>
               <button className="flex-1 px-4 py-1.5 rounded-md bg-blue-600 text-white font-semibold hover:bg-blue-700 transition" onClick={() => { setShowSignup(true); setMobileMenuOpen(false); }}>Sign Up</button>
             </div>
           </div>
