@@ -354,14 +354,14 @@ export default function Home() {
         </button>
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="absolute top-full left-0 w-full bg-white/10 backdrop-blur-2xl border-b border-white/20 shadow-2xl flex flex-col items-start px-4 sm:px-6 py-4 gap-3 md:hidden z-50">
-            <button onClick={() => { setActiveTab('Home'); setMobileMenuOpen(false); }} className={`text-white/80 font-medium hover:text-white transition-colors w-full text-left py-3 ${activeTab === 'Home' ? 'text-white' : ''}`}>Home</button>
-            <button onClick={() => { setActiveTab('Features'); setMobileMenuOpen(false); }} className={`text-white/80 font-medium hover:text-white transition-colors w-full text-left py-3 ${activeTab === 'Features' ? 'text-white' : ''}`}>Features</button>
-            <button onClick={() => { setActiveTab('Pricing'); setMobileMenuOpen(false); }} className={`text-white/80 font-medium hover:text-white transition-colors w-full text-left py-3 ${activeTab === 'Pricing' ? 'text-white' : ''}`}>Pricing</button>
-            <button onClick={() => { setActiveTab('Contact'); setMobileMenuOpen(false); }} className={`text-white/80 font-medium hover:text-white transition-colors w-full text-left py-3 ${activeTab === 'Contact' ? 'text-white' : ''}`}>Contact</button>
-            <div className="flex gap-3 w-full mt-4 pt-4 border-t border-white/20">
-              <button className="flex-1 px-4 py-3 rounded-xl border-2 border-white/30 text-white font-semibold bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all" onClick={() => { setShowLogin(true); setMobileMenuOpen(false); }}>Sign In</button>
-              <button className="flex-1 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-600 text-white font-semibold hover:from-blue-600 hover:via-purple-600 hover:to-indigo-700 transition-all" onClick={() => { setShowSignup(true); setMobileMenuOpen(false); }}>Get Started</button>
+          <div className="absolute top-full left-0 w-full bg-white/95 backdrop-blur-xl border-b border-white/30 shadow-2xl flex flex-col items-start px-4 sm:px-6 py-4 gap-3 md:hidden z-50">
+            <button onClick={() => { setActiveTab('Home'); setMobileMenuOpen(false); }} className={`text-gray-800 font-medium hover:text-blue-600 transition-colors w-full text-left py-3 ${activeTab === 'Home' ? 'text-blue-600 font-semibold' : ''}`}>Home</button>
+            <button onClick={() => { setActiveTab('Features'); setMobileMenuOpen(false); }} className={`text-gray-800 font-medium hover:text-blue-600 transition-colors w-full text-left py-3 ${activeTab === 'Features' ? 'text-blue-600 font-semibold' : ''}`}>Features</button>
+            <button onClick={() => { setActiveTab('Pricing'); setMobileMenuOpen(false); }} className={`text-gray-800 font-medium hover:text-blue-600 transition-colors w-full text-left py-3 ${activeTab === 'Pricing' ? 'text-blue-600 font-semibold' : ''}`}>Pricing</button>
+            <button onClick={() => { setActiveTab('Contact'); setMobileMenuOpen(false); }} className={`text-gray-800 font-medium hover:text-blue-600 transition-colors w-full text-left py-3 ${activeTab === 'Contact' ? 'text-blue-600 font-semibold' : ''}`}>Contact</button>
+            <div className="flex gap-3 w-full mt-4 pt-4 border-t border-gray-200">
+              <button className="flex-1 px-4 py-3 rounded-xl border-2 border-blue-600 text-blue-600 font-semibold bg-white hover:bg-blue-50 transition-all" onClick={() => { setShowLogin(true); setMobileMenuOpen(false); }}>Sign In</button>
+              <button className="flex-1 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all" onClick={() => { setShowSignup(true); setMobileMenuOpen(false); }}>Get Started</button>
             </div>
           </div>
         )}
