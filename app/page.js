@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
@@ -33,15 +33,6 @@ export default function Home() {
   const [signupSuccess, setSignupSuccess] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(false);
   const [justSignedUp, setJustSignedUp] = useState(false);
-  const [hitCount, setHitCount] = useState(0);
-
-  // Hit counter effect
-  useEffect(() => {
-    const count = localStorage.getItem('hitCount') || 0;
-    const newCount = parseInt(count) + 1;
-    localStorage.setItem('hitCount', newCount);
-    setHitCount(newCount);
-  }, []);
 
   // Login handler
   const handleLogin = async (e) => {
@@ -310,7 +301,7 @@ export default function Home() {
           <div>
             <span className="text-lg sm:text-2xl font-bold text-white tracking-tight drop-shadow-lg">HumanoText</span>
             <div className="text-xs sm:text-sm text-blue-200 font-medium">AI Text Humanizer</div>
-            <div className="text-xs text-blue-300/70">Visits: {hitCount}</div>
+            {/* Hit counter removed - was showing to everyone */}
           </div>
         </div>
         {/* Desktop Nav Links */}
