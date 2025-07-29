@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
@@ -33,6 +33,15 @@ export default function Home() {
   const [signupSuccess, setSignupSuccess] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(false);
   const [justSignedUp, setJustSignedUp] = useState(false);
+  const [hitCount, setHitCount] = useState(0);
+
+  // Hit counter effect
+  useEffect(() => {
+    const count = localStorage.getItem('hitCount') || 0;
+    const newCount = parseInt(count) + 1;
+    localStorage.setItem('hitCount', newCount);
+    setHitCount(newCount);
+  }, []);
 
   // Login handler
   const handleLogin = async (e) => {
@@ -287,20 +296,21 @@ export default function Home() {
         </div>
       )}
       {/* Spectacular Navigation Bar */}
-      <nav className="w-full bg-white/10 backdrop-blur-2xl border-b border-white/20 py-6 px-8 flex items-center justify-between mb-12 relative z-20 shadow-2xl">
+      <nav className="w-full bg-white/10 backdrop-blur-2xl border-b border-white/20 py-4 sm:py-6 px-4 sm:px-8 flex items-center justify-between mb-8 sm:mb-12 relative z-20 shadow-2xl">
         {/* Navigation Background Glow */}
         <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-indigo-500/10 rounded-b-3xl"></div>
         <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
-        <div className="flex items-center gap-4 relative z-10">
+        <div className="flex items-center gap-3 sm:gap-4 relative z-10">
           <div className="relative">
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 via-purple-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-2xl shadow-blue-500/25">
-              <span className="text-white text-2xl font-bold">H</span>
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 via-purple-500 to-indigo-600 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-2xl shadow-blue-500/25">
+              <span className="text-white text-xl sm:text-2xl font-bold">H</span>
             </div>
-            <div className="absolute -inset-1 bg-gradient-to-br from-blue-400 to-purple-600 rounded-2xl blur opacity-30 animate-pulse"></div>
+            <div className="absolute -inset-1 bg-gradient-to-br from-blue-400 to-purple-600 rounded-xl sm:rounded-2xl blur opacity-30 animate-pulse"></div>
           </div>
           <div>
-            <span className="text-2xl font-bold text-white tracking-tight drop-shadow-lg">HumanoText</span>
-            <div className="text-sm text-blue-200 font-medium">AI Text Humanizer</div>
+            <span className="text-lg sm:text-2xl font-bold text-white tracking-tight drop-shadow-lg">HumanoText</span>
+            <div className="text-xs sm:text-sm text-blue-200 font-medium">AI Text Humanizer</div>
+            <div className="text-xs text-blue-300/70">Visits: {hitCount}</div>
           </div>
         </div>
         {/* Desktop Nav Links */}
@@ -353,7 +363,7 @@ export default function Home() {
         </button>
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="absolute top-full left-0 w-full bg-white/10 backdrop-blur-2xl border-b border-white/20 shadow-2xl flex flex-col items-start px-6 py-4 gap-3 md:hidden z-30">
+          <div className="absolute top-full left-0 w-full bg-white/10 backdrop-blur-2xl border-b border-white/20 shadow-2xl flex flex-col items-start px-4 sm:px-6 py-4 gap-3 md:hidden z-50">
             <button onClick={() => { setActiveTab('Home'); setMobileMenuOpen(false); }} className={`text-white/80 font-medium hover:text-white transition-colors w-full text-left py-3 ${activeTab === 'Home' ? 'text-white' : ''}`}>Home</button>
             <button onClick={() => { setActiveTab('Features'); setMobileMenuOpen(false); }} className={`text-white/80 font-medium hover:text-white transition-colors w-full text-left py-3 ${activeTab === 'Features' ? 'text-white' : ''}`}>Features</button>
             <button onClick={() => { setActiveTab('Pricing'); setMobileMenuOpen(false); }} className={`text-white/80 font-medium hover:text-white transition-colors w-full text-left py-3 ${activeTab === 'Pricing' ? 'text-white' : ''}`}>Pricing</button>
@@ -367,11 +377,11 @@ export default function Home() {
       </nav>
 
       {/* Section Content */}
-      <div className="max-w-6xl mx-auto px-4 mb-10">
+      <div className="max-w-6xl mx-auto px-2 sm:px-4 mb-10">
                 {activeTab === 'Home' && (
           <>
             {/* Professional Humanizer Tool - Now at the top */}
-            <div id="humanizer-tool" className="max-w-5xl mx-auto mb-16 px-4">
+            <div id="humanizer-tool" className="max-w-5xl mx-auto mb-16 px-2 sm:px-4">
               <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 p-4 sm:p-6 lg:p-8 relative">
                 {/* Header Section */}
                 <div className="mb-6 sm:mb-8">
@@ -467,18 +477,18 @@ export default function Home() {
             </div>
             
             {/* Professional Header Above Humanizer */}
-            <div className="text-center mb-12 px-4">
+            <div className="text-center mb-12 px-2 sm:px-4">
               <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-blue-300 px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium mb-4 sm:mb-6 border border-blue-400/30">
                 <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-blue-400 rounded-full animate-pulse"></div>
                 AI-Powered Text Humanization
               </div>
               
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4 sm:mb-6 leading-tight px-2">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4 sm:mb-6 leading-tight px-1 sm:px-2">
                 Transform AI Text into 
                 <span className="bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent"> Human Writing</span>
               </h2>
               
-              <p className="text-base sm:text-lg lg:text-xl text-gray-300 max-w-3xl mx-auto mb-6 sm:mb-8 leading-relaxed px-4">
+              <p className="text-base sm:text-lg lg:text-xl text-gray-300 max-w-3xl mx-auto mb-6 sm:mb-8 leading-relaxed px-2 sm:px-4">
                 Our AI system employs multiple advanced techniques including sophisticated language models, 
                 <span className="text-blue-300 font-medium"> proprietary optimization algorithms</span>, and 
                 <span className="text-purple-300 font-medium"> specialized training methods</span> to help you create more natural, 
