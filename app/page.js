@@ -346,21 +346,21 @@ export default function Home() {
           </button>
         </div>
         {/* Mobile Hamburger */}
-        <button className="md:hidden flex items-center p-2 rounded-lg hover:bg-gray-100 transition-colors" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-          <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+        <button className="md:hidden flex items-center p-2 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d={mobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
           </svg>
         </button>
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="absolute top-full left-0 w-full bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-lg flex flex-col items-start px-6 py-4 gap-3 md:hidden animate-fade-in z-30">
-            <button onClick={() => { setActiveTab('Home'); setMobileMenuOpen(false); }} className={`text-gray-700 font-medium hover:text-blue-700 transition-colors w-full text-left py-2 ${activeTab === 'Home' ? 'text-blue-700' : ''}`}>Home</button>
-            <button onClick={() => { setActiveTab('Features'); setMobileMenuOpen(false); }} className={`text-gray-700 font-medium hover:text-blue-700 transition-colors w-full text-left py-2 ${activeTab === 'Features' ? 'text-blue-700' : ''}`}>Features</button>
-            <button onClick={() => { setActiveTab('Pricing'); setMobileMenuOpen(false); }} className={`text-gray-700 font-medium hover:text-blue-700 transition-colors w-full text-left py-2 ${activeTab === 'Pricing' ? 'text-blue-700' : ''}`}>Pricing</button>
-            <button onClick={() => { setActiveTab('Contact'); setMobileMenuOpen(false); }} className={`text-gray-700 font-medium hover:text-blue-700 transition-colors w-full text-left py-2 ${activeTab === 'Contact' ? 'text-blue-700' : ''}`}>Contact</button>
-            <div className="flex gap-3 w-full mt-4 pt-4 border-t border-gray-200">
-              <button className="flex-1 px-4 py-2.5 rounded-lg border border-blue-600 text-blue-600 font-semibold bg-white hover:bg-blue-50 transition-all" onClick={() => { setShowLogin(true); setMobileMenuOpen(false); }}>Sign In</button>
-              <button className="flex-1 px-4 py-2.5 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all" onClick={() => { setShowSignup(true); setMobileMenuOpen(false); }}>Get Started</button>
+          <div className="absolute top-full left-0 w-full bg-white/10 backdrop-blur-2xl border-b border-white/20 shadow-2xl flex flex-col items-start px-6 py-4 gap-3 md:hidden z-30">
+            <button onClick={() => { setActiveTab('Home'); setMobileMenuOpen(false); }} className={`text-white/80 font-medium hover:text-white transition-colors w-full text-left py-3 ${activeTab === 'Home' ? 'text-white' : ''}`}>Home</button>
+            <button onClick={() => { setActiveTab('Features'); setMobileMenuOpen(false); }} className={`text-white/80 font-medium hover:text-white transition-colors w-full text-left py-3 ${activeTab === 'Features' ? 'text-white' : ''}`}>Features</button>
+            <button onClick={() => { setActiveTab('Pricing'); setMobileMenuOpen(false); }} className={`text-white/80 font-medium hover:text-white transition-colors w-full text-left py-3 ${activeTab === 'Pricing' ? 'text-white' : ''}`}>Pricing</button>
+            <button onClick={() => { setActiveTab('Contact'); setMobileMenuOpen(false); }} className={`text-white/80 font-medium hover:text-white transition-colors w-full text-left py-3 ${activeTab === 'Contact' ? 'text-white' : ''}`}>Contact</button>
+            <div className="flex gap-3 w-full mt-4 pt-4 border-t border-white/20">
+              <button className="flex-1 px-4 py-3 rounded-xl border-2 border-white/30 text-white font-semibold bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all" onClick={() => { setShowLogin(true); setMobileMenuOpen(false); }}>Sign In</button>
+              <button className="flex-1 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-600 text-white font-semibold hover:from-blue-600 hover:via-purple-600 hover:to-indigo-700 transition-all" onClick={() => { setShowSignup(true); setMobileMenuOpen(false); }}>Get Started</button>
             </div>
           </div>
         )}
@@ -371,22 +371,22 @@ export default function Home() {
                 {activeTab === 'Home' && (
           <>
             {/* Professional Humanizer Tool - Now at the top */}
-            <div id="humanizer-tool" className="max-w-5xl mx-auto mb-16">
-              <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 p-8 relative">
+            <div id="humanizer-tool" className="max-w-5xl mx-auto mb-16 px-4">
+              <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 p-4 sm:p-6 lg:p-8 relative">
                 {/* Header Section */}
-                <div className="mb-8">
-                  <h3 className="text-2xl font-bold text-gray-800 mb-2">Your input content</h3>
-                  <p className="text-gray-600">Transform your AI-generated text into natural human writing</p>
+                <div className="mb-6 sm:mb-8">
+                  <h3 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2">Your input content</h3>
+                  <p className="text-sm sm:text-base text-gray-600">Transform your AI-generated text into natural human writing</p>
                 </div>
 
                 {/* Main Input Area */}
-                <div className="mb-8">
+                <div className="mb-6 sm:mb-8">
                   <Textarea
-                    rows={16}
+                    rows={12}
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
                     placeholder="Type or paste your AI-generated text here to humanize it..."
-                    className="w-full border border-gray-300 rounded-xl p-6 text-gray-800 text-lg resize-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all min-h-[400px]"
+                    className="w-full border border-gray-300 rounded-xl p-4 sm:p-6 text-gray-800 text-base sm:text-lg resize-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all min-h-[300px] sm:min-h-[400px]"
                   />
                 </div>
 
@@ -398,39 +398,39 @@ export default function Home() {
                 )}
 
                 {/* Bottom Controls */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
+                <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                     <span className="text-lg font-semibold text-gray-700">Tone:</span>
-                    <div className="flex gap-2">
-                      <button className={`px-6 py-3 rounded-xl text-base font-medium transition-all ${tone === 'Normal' ? 'bg-green-100 text-green-800 border-2 border-green-200' : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-green-300'}`} onClick={() => setTone('Normal')}>
+                    <div className="flex flex-wrap gap-2">
+                      <button className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-medium transition-all ${tone === 'Normal' ? 'bg-green-100 text-green-800 border-2 border-green-200' : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-green-300'}`} onClick={() => setTone('Normal')}>
                         Normal
                       </button>
-                      <button className={`px-6 py-3 rounded-xl text-base font-medium transition-all ${tone === 'Formal' ? 'bg-green-100 text-green-800 border-2 border-green-200' : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-green-300'}`} onClick={() => setTone('Formal')}>
+                      <button className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-medium transition-all ${tone === 'Formal' ? 'bg-green-100 text-green-800 border-2 border-green-200' : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-green-300'}`} onClick={() => setTone('Formal')}>
                         Formal
                       </button>
-                      <button className={`px-6 py-3 rounded-xl text-base font-medium transition-all ${tone === 'Academic' ? 'bg-green-100 text-green-800 border-2 border-green-200' : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-green-300'}`} onClick={() => setTone('Academic')}>
+                      <button className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-medium transition-all ${tone === 'Academic' ? 'bg-green-100 text-green-800 border-2 border-green-200' : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-green-300'}`} onClick={() => setTone('Academic')}>
                         Academic
                       </button>
                     </div>
                   </div>
                   
-                  <div className="flex gap-4">
+                  <div className="flex w-full lg:w-auto">
                     <Button
                       onClick={handleSubmit}
                       disabled={loading}
-                      className="px-8 py-4 bg-green-600 text-white rounded-xl text-lg font-semibold hover:bg-green-700 transition-all disabled:opacity-50 shadow-lg hover:shadow-xl"
+                      className="w-full lg:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-green-600 text-white rounded-xl text-base sm:text-lg font-semibold hover:bg-green-700 transition-all disabled:opacity-50 shadow-lg hover:shadow-xl"
                     >
                       {loading ? (
-                        <div className="flex items-center gap-3">
-                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                          <span>Humanizing...</span>
+                        <div className="flex items-center gap-2 sm:gap-3">
+                          <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                          <span className="text-sm sm:text-base">Humanizing...</span>
                         </div>
                       ) : (
                         <div className="flex items-center gap-2">
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                           </svg>
-                          <span>Humanize</span>
+                          <span className="text-sm sm:text-base">Humanize</span>
                         </div>
                       )}
                     </Button>
@@ -439,25 +439,25 @@ export default function Home() {
 
                 {/* Output Section */}
                 {result && (
-                  <div className="mt-8 p-8 bg-gray-50 rounded-2xl border border-gray-200">
-                    <div className="flex items-center justify-between mb-6">
-                      <h4 className="text-xl font-bold text-gray-800">Humanized Output</h4>
+                  <div className="mt-6 sm:mt-8 p-4 sm:p-6 lg:p-8 bg-gray-50 rounded-2xl border border-gray-200">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4 sm:mb-6">
+                      <h4 className="text-lg sm:text-xl font-bold text-gray-800">Humanized Output</h4>
                       <Button
                         onClick={handleCopy}
                         variant="outline"
-                        className="text-base rounded-xl border-2 border-gray-300 bg-white hover:bg-gray-50 px-4 py-2 font-medium"
+                        className="w-full sm:w-auto text-sm sm:text-base rounded-xl border-2 border-gray-300 bg-white hover:bg-gray-50 px-3 sm:px-4 py-2 font-medium"
                       >
-                        <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                         </svg>
                         Copy
                       </Button>
                     </div>
-                    <div className="text-gray-800 whitespace-pre-wrap leading-relaxed text-lg">
+                    <div className="text-gray-800 whitespace-pre-wrap leading-relaxed text-base sm:text-lg">
                       {result}
                     </div>
                     {copied && (
-                      <div className="mt-4 text-green-600 text-base font-medium text-center bg-green-50 px-4 py-2 rounded-lg">
+                      <div className="mt-4 text-green-600 text-sm sm:text-base font-medium text-center bg-green-50 px-3 sm:px-4 py-2 rounded-lg">
                         ✅ Text copied to clipboard!
                       </div>
                     )}
@@ -467,25 +467,25 @@ export default function Home() {
             </div>
             
             {/* Professional Header Above Humanizer */}
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-blue-300 px-4 py-2 rounded-full text-sm font-medium mb-6 border border-blue-400/30">
-                <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+            <div className="text-center mb-12 px-4">
+              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-blue-300 px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium mb-4 sm:mb-6 border border-blue-400/30">
+                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-blue-400 rounded-full animate-pulse"></div>
                 AI-Powered Text Humanization
               </div>
               
-              <h2 className="text-4xl font-bold text-white mb-6 leading-tight">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4 sm:mb-6 leading-tight px-2">
                 Transform AI Text into 
                 <span className="bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent"> Human Writing</span>
               </h2>
               
-              <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed">
+              <p className="text-base sm:text-lg lg:text-xl text-gray-300 max-w-3xl mx-auto mb-6 sm:mb-8 leading-relaxed px-4">
                 Our AI system employs multiple advanced techniques including sophisticated language models, 
                 <span className="text-blue-300 font-medium"> proprietary optimization algorithms</span>, and 
                 <span className="text-purple-300 font-medium"> specialized training methods</span> to help you create more natural, 
                 human-like content that bypasses AI detection tools.
               </p>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-4xl mx-auto">
                 <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
                   <div className="flex items-center justify-center mb-3">
                     <svg className="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
