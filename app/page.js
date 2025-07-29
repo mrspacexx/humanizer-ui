@@ -764,8 +764,8 @@ export default function Home() {
                 <li><strong>Paste your AI-generated text</strong> into the input field</li>
                                  <li><strong>Choose your preferred writing style</strong> (Normal, Formal, or Academic)</li>
                  <li><strong>Click "Humanize"</strong> to process your text</li>
-                 <li><strong>Review the improved output</strong> and copy it to your clipboard</li>
-                 <li><strong>Use the enhanced text</strong> in your content, assignments, or communications</li>
+                 <li><strong>Review the processed output</strong> and copy it to your clipboard</li>
+                 <li><strong>Use the refined text</strong> in your content, assignments, or communications</li>
               </ol>
             </div>
 
@@ -776,10 +776,10 @@ export default function Home() {
                 <div className="space-y-2">
                                      <h4 className="font-semibold text-gray-800">For Students</h4>
                    <ul className="list-disc list-inside text-gray-700 text-sm space-y-1">
-                     <li>Improve writing quality and style</li>
-                     <li>Learn different writing techniques</li>
-                     <li>Enhance academic writing skills</li>
-                     <li>Save time on content creation</li>
+                     <li>Make AI content more natural and readable</li>
+                     <li>Adapt content to different writing styles</li>
+                     <li>Ensure content sounds more human-written</li>
+                     <li>Save time on content refinement</li>
                    </ul>
                 </div>
                 <div className="space-y-2">
@@ -823,11 +823,11 @@ export default function Home() {
                 Our advanced security measures ensure that your content remains completely private and confidential. 
                 You can use our tool with complete confidence knowing your data is protected.
               </p>
-              <div className="mt-4 text-sm text-gray-600">
-                <p><strong>Important Notice:</strong> This tool is designed to improve writing quality and readability. 
-                Users are responsible for ensuring their use complies with applicable laws, academic policies, and terms of service. 
-                We do not guarantee that processed content will pass any specific detection systems.</p>
-              </div>
+                             <div className="mt-4 text-sm text-gray-600">
+                 <p><strong>Important Notice:</strong> This tool is designed to make AI-generated content sound more natural and human-like. 
+                 Users are responsible for ensuring their use complies with applicable laws, academic policies, and terms of service. 
+                 We do not guarantee that processed content will pass any specific detection systems.</p>
+               </div>
             </div>
           </div>
         </section>
