@@ -616,18 +616,35 @@ export default function Home() {
           </section>
         )}
         {activeTab === 'Contact' && (
-          <section className="mb-8 bg-white/80 backdrop-blur-sm rounded-3xl border border-gray-200/50 p-10 shadow-xl">
-            <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Get in Touch</h2>
+          <section className="mb-8 bg-white/80 backdrop-blur-sm rounded-3xl border border-gray-200/50 p-4 sm:p-6 lg:p-10 shadow-xl">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 sm:mb-8 text-center">Get in Touch</h2>
             <div className="max-w-2xl mx-auto">
-              <form className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-6">
-                  <input type="text" placeholder="Your Name" className="border border-gray-300 rounded-xl px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all bg-white/50 backdrop-blur-sm" />
-                  <input type="email" placeholder="Your Email" className="border border-gray-300 rounded-xl px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all bg-white/50 backdrop-blur-sm" />
+              <form className="space-y-4 sm:space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                  <input 
+                    type="text" 
+                    placeholder="Your Name" 
+                    className="border border-gray-300 rounded-xl px-3 sm:px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all bg-white text-gray-800 placeholder-gray-500 text-sm sm:text-base" 
+                  />
+                  <input 
+                    type="email" 
+                    placeholder="Your Email" 
+                    className="border border-gray-300 rounded-xl px-3 sm:px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all bg-white text-gray-800 placeholder-gray-500 text-sm sm:text-base" 
+                  />
                 </div>
-                <textarea placeholder="Your Message" rows={6} className="border border-gray-300 rounded-xl px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all bg-white/50 backdrop-blur-sm w-full resize-none"></textarea>
-                <button type="submit" className="w-full px-6 py-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg text-lg">Send Message</button>
+                <textarea 
+                  placeholder="Your Message" 
+                  rows={6} 
+                  className="border border-gray-300 rounded-xl px-3 sm:px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all bg-white text-gray-800 placeholder-gray-500 text-sm sm:text-base w-full resize-none" 
+                ></textarea>
+                <button 
+                  type="submit" 
+                  className="w-full px-4 sm:px-6 py-3 sm:py-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg text-base sm:text-lg"
+                >
+                  Send Message
+                </button>
               </form>
-              <div className="mt-8 text-center text-gray-500">
+              <div className="mt-6 sm:mt-8 text-center text-gray-500 text-sm sm:text-base">
                 Or email us directly at <a href="mailto:info@humanotext.com" className="text-blue-600 hover:underline font-medium">info@humanotext.com</a>
               </div>
             </div>
