@@ -219,26 +219,40 @@ export default function Home() {
       </div>
       {/* Login Modal */}
       {showLogin && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md relative border border-gray-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 w-full max-w-md relative border border-gray-200">
             <button className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl transition-colors" onClick={() => setShowLogin(false)}>&times;</button>
-            <h2 className="text-2xl font-bold mb-6 text-gray-800">Welcome Back</h2>
+            <h2 className="text-xl sm:text-2xl font-bold mb-6 text-gray-800">Welcome Back</h2>
             <form onSubmit={handleLogin} className="flex flex-col gap-4">
-              <input type="email" required placeholder="Email" value={loginEmail} onChange={e => setLoginEmail(e.target.value)} className="border border-gray-300 rounded-lg px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all" />
-              <input type="password" required placeholder="Password" value={loginPassword} onChange={e => setLoginPassword(e.target.value)} className="border border-gray-300 rounded-lg px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all" />
+              <input 
+                type="email" 
+                required 
+                placeholder="Email" 
+                value={loginEmail} 
+                onChange={e => setLoginEmail(e.target.value)} 
+                className="border border-gray-300 rounded-lg px-3 sm:px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all bg-white text-gray-800 placeholder-gray-500 text-sm sm:text-base" 
+              />
+              <input 
+                type="password" 
+                required 
+                placeholder="Password" 
+                value={loginPassword} 
+                onChange={e => setLoginPassword(e.target.value)} 
+                className="border border-gray-300 rounded-lg px-3 sm:px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all bg-white text-gray-800 placeholder-gray-500 text-sm sm:text-base" 
+              />
               {authError && <div className="text-red-600 text-sm bg-red-50 p-3 rounded-lg">{authError}</div>}
               <button type="submit" disabled={loading} className="w-full px-4 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
                 {loading ? (
                   <div className="flex items-center justify-center gap-2">
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    <span>Signing In...</span>
+                    <span className="text-sm sm:text-base">Signing In...</span>
                   </div>
                 ) : (
-                  "Sign In"
+                  <span className="text-sm sm:text-base">Sign In</span>
                 )}
               </button>
             </form>
-            <div className="mt-6 text-sm text-center text-gray-500">
+            <div className="mt-6 text-xs sm:text-sm text-center text-gray-500">
               Don't have an account? <button className="text-blue-600 hover:underline font-medium" onClick={() => { setShowLogin(false); setShowSignup(true); }}>Create Account</button>
             </div>
           </div>
@@ -246,27 +260,48 @@ export default function Home() {
       )}
       {/* Signup Modal */}
       {showSignup && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md relative border border-gray-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 w-full max-w-md relative border border-gray-200">
             <button className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl transition-colors" onClick={() => setShowSignup(false)}>&times;</button>
-            <h2 className="text-2xl font-bold mb-6 text-gray-800">Create Account</h2>
+            <h2 className="text-xl sm:text-2xl font-bold mb-6 text-gray-800">Create Account</h2>
             <form onSubmit={handleSignup} className="flex flex-col gap-4">
-              <input type="email" required placeholder="Email" value={signupEmail} onChange={e => setSignupEmail(e.target.value)} className="border border-gray-300 rounded-lg px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all" />
-              <input type="password" required placeholder="Password" value={signupPassword} onChange={e => setSignupPassword(e.target.value)} className="border border-gray-300 rounded-lg px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all" />
-              <input type="password" required placeholder="Confirm Password" value={signupConfirm} onChange={e => setSignupConfirm(e.target.value)} className="border border-gray-300 rounded-lg px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all" />
+              <input 
+                type="email" 
+                required 
+                placeholder="Email" 
+                value={signupEmail} 
+                onChange={e => setSignupEmail(e.target.value)} 
+                className="border border-gray-300 rounded-lg px-3 sm:px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all bg-white text-gray-800 placeholder-gray-500 text-sm sm:text-base" 
+              />
+              <input 
+                type="password" 
+                required 
+                placeholder="Password" 
+                value={signupPassword} 
+                onChange={e => setSignupPassword(e.target.value)} 
+                className="border border-gray-300 rounded-lg px-3 sm:px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all bg-white text-gray-800 placeholder-gray-500 text-sm sm:text-base" 
+              />
+              <input 
+                type="password" 
+                required 
+                placeholder="Confirm Password" 
+                value={signupConfirm} 
+                onChange={e => setSignupConfirm(e.target.value)} 
+                className="border border-gray-300 rounded-lg px-3 sm:px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all bg-white text-gray-800 placeholder-gray-500 text-sm sm:text-base" 
+              />
               {authError && <div className="text-red-600 text-sm bg-red-50 p-3 rounded-lg">{authError}</div>}
               <button type="submit" disabled={loading} className="w-full px-4 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
                 {loading ? (
                   <div className="flex items-center justify-center gap-2">
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    <span>Creating Account...</span>
+                    <span className="text-sm sm:text-base">Creating Account...</span>
                   </div>
                 ) : (
-                  "Create Account"
+                  <span className="text-sm sm:text-base">Create Account</span>
                 )}
               </button>
             </form>
-            <div className="mt-6 text-sm text-center text-gray-500">
+            <div className="mt-6 text-xs sm:text-sm text-center text-gray-500">
               Already have an account? <button className="text-blue-600 hover:underline font-medium" onClick={() => { setShowSignup(false); setShowLogin(true); }}>Sign In</button>
             </div>
           </div>
