@@ -19,6 +19,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
   const [wordLimitError, setWordLimitError] = useState(false);
+  const [totalWordsUsed, setTotalWordsUsed] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("Home");
   // Login/Signup modal state
@@ -142,17 +143,22 @@ export default function Home() {
   };
 
   const handleSubmit = async () => {
-    // Kelime limiti kontrolü - giriş yapmayan kullanıcılar için 1000 kelime
+    // Per request 200 kelime limiti (hem giriş yapan hem yapmayan için)
     const wordCount = inputText.trim().split(/\s+/).length;
-    const limit = isLoggedIn ? Infinity : 1000;
-    
-    if (wordCount > limit) {
+    if (wordCount > 200) {
       setWordLimitError(true);
       setResult("");
       return;
-    } else {
-      setWordLimitError(false);
     }
+    
+    // Giriş yapmayan kullanıcılar için toplam 1000 kelime limiti
+    if (!isLoggedIn && (totalWordsUsed + wordCount) > 1000) {
+      setWordLimitError(true);
+      setResult("");
+      return;
+    }
+    
+    setWordLimitError(false);
     setLoading(true);
     setResult("");
 
@@ -171,6 +177,11 @@ export default function Home() {
 
       const data = await response.json();
       setResult(data.result);
+      
+      // Giriş yapmayan kullanıcılar için toplam kelime sayısını güncelle
+      if (!isLoggedIn) {
+        setTotalWordsUsed(prev => prev + wordCount);
+      }
     } catch (error) {
       console.error("Error:", error);
       setResult("⚠️ An error occurred. Unable to connect to server.");
@@ -499,19 +510,19 @@ export default function Home() {
                 {/* Error Message */}
                 {wordLimitError && (
                   <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
-                    ⚠️ {isLoggedIn ? "An error occurred. Please try again." : "Maximum 1000 words allowed for free users. Sign up for unlimited access!"}
+                    ⚠️ {inputText.trim().split(/\s+/).length > 200 ? "Maximum 200 words per request allowed." : "You've reached your 1000 word limit. Sign up for unlimited access!"}
                   </div>
                 )}
 
                 {/* Word Count Indicator */}
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-sm text-gray-600">
-                    {inputText.trim().split(/\s+/).filter(word => word.length > 0).length} words
+                    {inputText.trim().split(/\s+/).filter(word => word.length > 0).length} words / 200 per request
                     {!isLoggedIn && (
-                      <span className="text-orange-600 font-medium"> / 1000 limit</span>
+                      <span className="text-orange-600 font-medium"> (Total used: {totalWordsUsed}/1000)</span>
                     )}
                     {isLoggedIn && (
-                      <span className="text-green-600 font-medium"> / Unlimited</span>
+                      <span className="text-green-600 font-medium"> (Unlimited)</span>
                     )}
                   </span>
                 </div>
