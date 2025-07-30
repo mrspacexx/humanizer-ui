@@ -20,6 +20,7 @@ export default function Home() {
   const [copied, setCopied] = useState(false);
   const [wordLimitError, setWordLimitError] = useState(false);
   const [totalWordsUsed, setTotalWordsUsed] = useState(0);
+  const [usePowerMode, setUsePowerMode] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("Home");
   // Login/Signup modal state
@@ -151,12 +152,14 @@ export default function Home() {
       return;
     }
     
-    // Power Mode: Giriş yapmayan kullanıcılar için 200 kelime, giriş yapanlar için 1000 kelime (24 saat)
-    const powerLimit = isLoggedIn ? 1000 : 200;
-    if (!isLoggedIn && (totalWordsUsed + wordCount) > powerLimit) {
-      setWordLimitError(true);
-      setResult("");
-      return;
+    // Power Mode limitleri sadece Power Mode kullanılıyorsa kontrol et
+    if (usePowerMode) {
+      const powerLimit = isLoggedIn ? 1000 : 200;
+      if (!isLoggedIn && (totalWordsUsed + wordCount) > powerLimit) {
+        setWordLimitError(true);
+        setResult("");
+        return;
+      }
     }
     
     setWordLimitError(false);
@@ -164,7 +167,8 @@ export default function Home() {
     setResult("");
 
     try {
-      const response = await fetch('http://localhost:8000/humanize/power', {
+      const endpoint = usePowerMode ? 'http://localhost:8000/humanize/power' : 'http://localhost:8000/humanize';
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
@@ -519,11 +523,14 @@ export default function Home() {
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-sm text-gray-600">
                     {inputText.trim().split(/\s+/).filter(word => word.length > 0).length} words / 200 per request
-                    {!isLoggedIn && (
+                    {usePowerMode && !isLoggedIn && (
                       <span className="text-orange-600 font-medium"> (Power Mode: {totalWordsUsed}/200)</span>
                     )}
-                    {isLoggedIn && (
+                    {usePowerMode && isLoggedIn && (
                       <span className="text-green-600 font-medium"> (Power Mode: {totalWordsUsed}/1000)</span>
+                    )}
+                    {!usePowerMode && (
+                      <span className="text-blue-600 font-medium"> (Normal Mode)</span>
                     )}
                   </span>
                 </div>
@@ -543,6 +550,17 @@ export default function Home() {
                         Academic
                       </button>
                     </div>
+                  </div>
+                  
+                  {/* Power Mode Toggle */}
+                  <div className="flex items-center gap-3">
+                    <span className="text-sm font-medium text-gray-700">Power Mode:</span>
+                    <button 
+                      className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${usePowerMode ? 'bg-purple-100 text-purple-800 border-2 border-purple-200' : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-purple-300'}`} 
+                      onClick={() => setUsePowerMode(!usePowerMode)}
+                    >
+                      {usePowerMode ? '⚡ ON' : '⚡ OFF'}
+                    </button>
                   </div>
                   
                   <div className="flex w-full lg:w-auto">
