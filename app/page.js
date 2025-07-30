@@ -152,6 +152,13 @@ export default function Home() {
       return;
     }
     
+    // Normal Mode: Giriş yapmayan kullanıcılar için 1000 kelime limiti
+    if (!usePowerMode && !isLoggedIn && (totalWordsUsed + wordCount) > 1000) {
+      setWordLimitError(true);
+      setResult("");
+      return;
+    }
+    
     // Power Mode limitleri sadece Power Mode kullanılıyorsa kontrol et
     if (usePowerMode) {
       const powerLimit = isLoggedIn ? 1000 : 200;
@@ -515,7 +522,11 @@ export default function Home() {
                 {/* Error Message */}
                 {wordLimitError && (
                   <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
-                    ⚠️ {inputText.trim().split(/\s+/).length > 200 ? "Maximum 200 words per request allowed." : `You've reached your ${isLoggedIn ? '1000' : '200'} word limit for Power Mode. Sign up for unlimited access!`}
+                    ⚠️ {inputText.trim().split(/\s+/).length > 200 ? "Maximum 200 words per request allowed." : 
+                      usePowerMode ? 
+                        `You've reached your ${isLoggedIn ? '1000' : '200'} word limit for Power Mode. Sign up for unlimited access!` :
+                        `You've reached your 1000 word limit for Normal Mode. Sign up for unlimited access!`
+                    }
                   </div>
                 )}
 
@@ -529,8 +540,11 @@ export default function Home() {
                     {usePowerMode && isLoggedIn && (
                       <span className="text-green-600 font-medium"> (Power Mode: {totalWordsUsed}/1000)</span>
                     )}
-                    {!usePowerMode && (
-                      <span className="text-blue-600 font-medium"> (Normal Mode)</span>
+                    {!usePowerMode && !isLoggedIn && (
+                      <span className="text-blue-600 font-medium"> (Normal Mode: {totalWordsUsed}/1000)</span>
+                    )}
+                    {!usePowerMode && isLoggedIn && (
+                      <span className="text-green-600 font-medium"> (Normal Mode: Unlimited)</span>
                     )}
                   </span>
                 </div>
