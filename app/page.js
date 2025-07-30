@@ -148,7 +148,7 @@ export default function Home() {
       setResult(data.result);
     } catch (error) {
       console.error("Error:", error);
-      setResult("⚠️ Bir hata oluştu. Sunucuya ulaşılamıyor.");
+      setResult("⚠️ An error occurred. Unable to connect to server.");
     } finally {
       setLoading(false);
     }
