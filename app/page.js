@@ -142,9 +142,11 @@ export default function Home() {
   };
 
   const handleSubmit = async () => {
-    // 200 kelime limiti kontrolü
+    // Kelime limiti kontrolü - giriş yapmayan kullanıcılar için 1000 kelime
     const wordCount = inputText.trim().split(/\s+/).length;
-    if (wordCount > 200) {
+    const limit = isLoggedIn ? Infinity : 1000;
+    
+    if (wordCount > limit) {
       setWordLimitError(true);
       setResult("");
       return;
@@ -497,9 +499,22 @@ export default function Home() {
                 {/* Error Message */}
                 {wordLimitError && (
                   <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
-                    ⚠️ Maximum 200 words allowed.
+                    ⚠️ {isLoggedIn ? "An error occurred. Please try again." : "Maximum 1000 words allowed for free users. Sign up for unlimited access!"}
                   </div>
                 )}
+
+                {/* Word Count Indicator */}
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-sm text-gray-600">
+                    {inputText.trim().split(/\s+/).filter(word => word.length > 0).length} words
+                    {!isLoggedIn && (
+                      <span className="text-orange-600 font-medium"> / 1000 limit</span>
+                    )}
+                    {isLoggedIn && (
+                      <span className="text-green-600 font-medium"> / Unlimited</span>
+                    )}
+                  </span>
+                </div>
 
                 {/* Bottom Controls */}
                 <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
