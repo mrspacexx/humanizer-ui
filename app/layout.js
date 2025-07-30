@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Humanizer.AI",
+  title: "HumanoText",
   description: "Rewrite AI-generated text like a human ✨",
 };
 
