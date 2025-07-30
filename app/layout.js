@@ -16,6 +16,9 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "HumanoText",
   description: "Rewrite AI-generated text like a human ✨",
+  icons: {
+    icon: '/favicon.svg',
+  },
 };
 
 // ./app/layout.js
