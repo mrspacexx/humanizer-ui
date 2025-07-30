@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
@@ -33,6 +33,17 @@ export default function Home() {
   const [signupSuccess, setSignupSuccess] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(false);
   const [justSignedUp, setJustSignedUp] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
+
+  // Check if user is already logged in on page load
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsLoggedIn(true);
+      // You could also verify the token with the backend here
+    }
+  }, []);
 
   // Login handler
   const handleLogin = async (e) => {
@@ -52,6 +63,8 @@ export default function Home() {
       }
       const data = await res.json();
       localStorage.setItem('token', data.access_token);
+      setIsLoggedIn(true);
+      setUserEmail(loginEmail);
       setShowLogin(false);
       setLoginEmail("");
       setLoginPassword("");
@@ -120,6 +133,12 @@ export default function Home() {
     setShowSignup(true);
     setSignupSuccess(false);
     setLoginSuccess(false);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setIsLoggedIn(false);
+    setUserEmail("");
   };
 
   const handleSubmit = async () => {
@@ -403,14 +422,25 @@ export default function Home() {
         </div>
         {/* Desktop Auth Buttons */}
         <div className="hidden md:flex items-center gap-4 relative z-10">
-          <button className="px-8 py-3 rounded-xl border-2 border-white/30 text-white font-semibold bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105" onClick={openLogin}>
-            <span className="relative z-10">Sign In</span>
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-xl opacity-0 hover:opacity-100 transition-opacity"></div>
-          </button>
-          <button className="px-8 py-3 rounded-xl bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-600 text-white font-semibold hover:from-blue-600 hover:via-purple-600 hover:to-indigo-700 transition-all duration-300 shadow-2xl hover:shadow-blue-500/25 hover:scale-105 relative group" onClick={openSignup}>
-            <span className="relative z-10">Get Started</span>
-            <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-purple-600 rounded-xl blur opacity-30 group-hover:opacity-50 transition-opacity"></div>
-          </button>
+          {!isLoggedIn ? (
+            <>
+              <button className="px-8 py-3 rounded-xl border-2 border-white/30 text-white font-semibold bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105" onClick={openLogin}>
+                <span className="relative z-10">Sign In</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-xl opacity-0 hover:opacity-100 transition-opacity"></div>
+              </button>
+              <button className="px-8 py-3 rounded-xl bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-600 text-white font-semibold hover:from-blue-600 hover:via-purple-600 hover:to-indigo-700 transition-all duration-300 shadow-2xl hover:shadow-blue-500/25 hover:scale-105 relative group" onClick={openSignup}>
+                <span className="relative z-10">Get Started</span>
+                <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-purple-600 rounded-xl blur opacity-30 group-hover:opacity-50 transition-opacity"></div>
+              </button>
+            </>
+          ) : (
+            <div className="flex items-center gap-4">
+              <span className="text-white/80 text-sm">Welcome, {userEmail}</span>
+              <button className="px-6 py-2 rounded-xl border-2 border-white/30 text-white font-semibold bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all duration-300" onClick={handleLogout}>
+                Logout
+              </button>
+            </div>
+          )}
         </div>
         {/* Mobile Hamburger */}
         <button className="md:hidden flex items-center p-2 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
@@ -425,10 +455,17 @@ export default function Home() {
             <button onClick={() => { setActiveTab('Features'); setMobileMenuOpen(false); }} className={`text-gray-800 font-medium hover:text-blue-600 transition-colors w-full text-left py-3 ${activeTab === 'Features' ? 'text-blue-600 font-semibold' : ''}`}>Features</button>
             <button onClick={() => { setActiveTab('Pricing'); setMobileMenuOpen(false); }} className={`text-gray-800 font-medium hover:text-blue-600 transition-colors w-full text-left py-3 ${activeTab === 'Pricing' ? 'text-blue-600 font-semibold' : ''}`}>Pricing</button>
             <button onClick={() => { setActiveTab('Contact'); setMobileMenuOpen(false); }} className={`text-gray-800 font-medium hover:text-blue-600 transition-colors w-full text-left py-3 ${activeTab === 'Contact' ? 'text-blue-600 font-semibold' : ''}`}>Contact</button>
-            <div className="flex gap-3 w-full mt-4 pt-4 border-t border-gray-200">
-              <button className="flex-1 px-4 py-3 rounded-xl border-2 border-blue-600 text-blue-600 font-semibold bg-white hover:bg-blue-50 transition-all" onClick={() => { setShowLogin(true); setMobileMenuOpen(false); }}>Sign In</button>
-              <button className="flex-1 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all" onClick={() => { setShowSignup(true); setMobileMenuOpen(false); }}>Get Started</button>
-            </div>
+            {!isLoggedIn ? (
+              <div className="flex gap-3 w-full mt-4 pt-4 border-t border-gray-200">
+                <button className="flex-1 px-4 py-3 rounded-xl border-2 border-blue-600 text-blue-600 font-semibold bg-white hover:bg-blue-50 transition-all" onClick={() => { setShowLogin(true); setMobileMenuOpen(false); }}>Sign In</button>
+                <button className="flex-1 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all" onClick={() => { setShowSignup(true); setMobileMenuOpen(false); }}>Get Started</button>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-3 w-full mt-4 pt-4 border-t border-gray-200">
+                <span className="text-gray-800 text-sm font-medium">Welcome, {userEmail}</span>
+                <button className="w-full px-4 py-3 rounded-xl border-2 border-red-600 text-red-600 font-semibold bg-white hover:bg-red-50 transition-all" onClick={() => { handleLogout(); setMobileMenuOpen(false); }}>Logout</button>
+              </div>
+            )}
           </div>
         )}
       </nav>
