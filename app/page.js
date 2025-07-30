@@ -191,17 +191,17 @@ export default function Home() {
         <div className="absolute top-3/4 left-0 w-full h-px bg-gradient-to-r from-transparent via-green-400/35 to-transparent animate-pulse" style={{animationDelay: '3s'}}></div>
         
         {/* Floating Icons */}
-        <div className="absolute top-32 left-16 text-blue-400/20 animate-bounce" style={{animationDuration: '4s'}}>
+        <div className="absolute top-32 left-16 text-blue-400/10 animate-bounce" style={{animationDuration: '4s'}}>
           <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
             <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
           </svg>
         </div>
-        <div className="absolute top-48 right-24 text-purple-400/20 animate-bounce" style={{animationDuration: '5s', animationDelay: '1s'}}>
+        <div className="absolute top-48 right-24 text-purple-400/10 animate-bounce" style={{animationDuration: '5s', animationDelay: '1s'}}>
           <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
             <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
           </svg>
         </div>
-        <div className="absolute bottom-32 left-1/3 text-green-400/20 animate-bounce" style={{animationDuration: '6s', animationDelay: '2s'}}>
+        <div className="absolute bottom-32 left-1/3 text-green-400/10 animate-bounce" style={{animationDuration: '6s', animationDelay: '2s'}}>
           <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
             <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
           </svg>
@@ -209,7 +209,6 @@ export default function Home() {
         
         {/* Glowing Orbs */}
         <div className="absolute top-16 right-1/3 w-4 h-4 bg-blue-400 rounded-full shadow-lg shadow-blue-400/50 animate-pulse"></div>
-        <div className="absolute top-64 left-1/5 w-3 h-3 bg-purple-400 rounded-full shadow-lg shadow-purple-400/50 animate-pulse" style={{animationDelay: '1s'}}></div>
         <div className="absolute bottom-32 right-1/4 w-2 h-2 bg-green-400 rounded-full shadow-lg shadow-green-400/50 animate-pulse" style={{animationDelay: '2s'}}></div>
         
         {/* Cosmic Dust */}
