@@ -33,6 +33,7 @@ export default function Home() {
   const [signupConfirm, setSignupConfirm] = useState("");
   const [authError, setAuthError] = useState("");
   const [signupSuccess, setSignupSuccess] = useState(false);
+  const [emailVerificationRequired, setEmailVerificationRequired] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(false);
   const [justSignedUp, setJustSignedUp] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -58,12 +59,16 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: loginEmail, password: loginPassword }),
       });
+      const data = await res.json();
       if (!res.ok) {
-        const err = await res.json();
-        setAuthError(err.detail || "Invalid email or password. Please try again.");
+        // Handle email verification error specifically
+        if (data.detail && data.detail.includes("verification")) {
+          setAuthError("Please verify your email address before logging in. Check your inbox for the verification link.");
+        } else {
+          setAuthError(data.detail || "Invalid email or password. Please try again.");
+        }
         return;
       }
-      const data = await res.json();
       localStorage.setItem('token', data.access_token);
       setIsLoggedIn(true);
       setUserEmail(loginEmail);
@@ -104,20 +109,37 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: signupEmail, password: signupPassword }),
       });
+      const data = await res.json();
       if (!res.ok) {
-        const err = await res.json();
-        setAuthError(err.detail || "Account creation failed. Please try again.");
+        setAuthError(data.detail || "Account creation failed. Please try again.");
         return;
       }
-      setShowSignup(false);
-      setSignupEmail("");
-      setSignupPassword("");
-      setSignupConfirm("");
-      setAuthError("");
-      setSignupSuccess(true);
-      setJustSignedUp(true);
-      setTimeout(() => setSignupSuccess(false), 6000);
-      // TODO: Auto-login or info message can be added here
+      
+      // Check if email verification is required
+      if (data.message && data.message.includes("verification")) {
+        setShowSignup(false);
+        setSignupEmail("");
+        setSignupPassword("");
+        setSignupConfirm("");
+        setAuthError("");
+        setSignupSuccess(true);
+        setEmailVerificationRequired(true);
+        setJustSignedUp(true);
+        setTimeout(() => setSignupSuccess(false), 6000);
+      } else if (data.access_token) {
+        // Auto-login if no verification required
+        localStorage.setItem('token', data.access_token);
+        setIsLoggedIn(true);
+        setUserEmail(signupEmail);
+        setShowSignup(false);
+        setSignupEmail("");
+        setSignupPassword("");
+        setSignupConfirm("");
+        setAuthError("");
+        setSignupSuccess(true);
+        setJustSignedUp(true);
+        setTimeout(() => setSignupSuccess(false), 6000);
+      }
     } catch (err) {
       setAuthError("Connection error. Please check your internet and try again.");
     } finally {
@@ -358,8 +380,13 @@ export default function Home() {
       {signupSuccess && (
         <div className="fixed top-6 left-1/2 -translate-x-1/2 bg-green-100 border border-green-400 text-green-700 px-6 py-4 rounded-xl shadow-lg z-50 flex items-center gap-4 backdrop-blur-sm">
           <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-          Registration successful! You can now sign in.
-          <button className="ml-2 text-blue-600 underline font-medium" onClick={() => { setShowLogin(true); setSignupSuccess(false); }}>Sign In</button>
+          {emailVerificationRequired ? 
+            "Account created! Please check your email for verification link." :
+            "Registration successful! You can now sign in."
+          }
+          {!emailVerificationRequired && (
+            <button className="ml-2 text-blue-600 underline font-medium" onClick={() => { setShowLogin(true); setSignupSuccess(false); }}>Sign In</button>
+          )}
         </div>
       )}
       {loginSuccess && (
