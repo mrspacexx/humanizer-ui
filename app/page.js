@@ -53,7 +53,7 @@ export default function Home() {
     setAuthError("");
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:8000/auth/login", {
+      const res = await fetch("https://yzbs5m62yw9odw-8000.proxy.runpod.net/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: loginEmail, password: loginPassword }),
@@ -99,7 +99,7 @@ export default function Home() {
     
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:8000/auth/signup", {
+      const res = await fetch("https://yzbs5m62yw9odw-8000.proxy.runpod.net/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: signupEmail, password: signupPassword }),
@@ -174,7 +174,7 @@ export default function Home() {
     setResult("");
 
     try {
-      const endpoint = usePowerMode ? 'http://localhost:8000/humanize/power' : 'http://localhost:8000/humanize';
+      const endpoint = usePowerMode ? 'https://yzbs5m62yw9odw-8000.proxy.runpod.net/humanize/power' : 'https://yzbs5m62yw9odw-8000.proxy.runpod.net/humanize';
       const response = await fetch(endpoint, {
         method: "POST",
         headers: { 
