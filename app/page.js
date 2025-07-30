@@ -151,8 +151,9 @@ export default function Home() {
       return;
     }
     
-    // Giriş yapmayan kullanıcılar için toplam 1000 kelime limiti
-    if (!isLoggedIn && (totalWordsUsed + wordCount) > 1000) {
+    // Power Mode: Giriş yapmayan kullanıcılar için 200 kelime, giriş yapanlar için 1000 kelime (24 saat)
+    const powerLimit = isLoggedIn ? 1000 : 200;
+    if (!isLoggedIn && (totalWordsUsed + wordCount) > powerLimit) {
       setWordLimitError(true);
       setResult("");
       return;
@@ -163,7 +164,7 @@ export default function Home() {
     setResult("");
 
     try {
-      const response = await fetch('http://localhost:8000/humanize', {
+      const response = await fetch('http://localhost:8000/humanize/power', {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
@@ -510,7 +511,7 @@ export default function Home() {
                 {/* Error Message */}
                 {wordLimitError && (
                   <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
-                    ⚠️ {inputText.trim().split(/\s+/).length > 200 ? "Maximum 200 words per request allowed." : "You've reached your 1000 word limit. Sign up for unlimited access!"}
+                    ⚠️ {inputText.trim().split(/\s+/).length > 200 ? "Maximum 200 words per request allowed." : `You've reached your ${isLoggedIn ? '1000' : '200'} word limit for Power Mode. Sign up for unlimited access!`}
                   </div>
                 )}
 
@@ -519,10 +520,10 @@ export default function Home() {
                   <span className="text-sm text-gray-600">
                     {inputText.trim().split(/\s+/).filter(word => word.length > 0).length} words / 200 per request
                     {!isLoggedIn && (
-                      <span className="text-orange-600 font-medium"> (Total used: {totalWordsUsed}/1000)</span>
+                      <span className="text-orange-600 font-medium"> (Power Mode: {totalWordsUsed}/200)</span>
                     )}
                     {isLoggedIn && (
-                      <span className="text-green-600 font-medium"> (Unlimited)</span>
+                      <span className="text-green-600 font-medium"> (Power Mode: {totalWordsUsed}/1000)</span>
                     )}
                   </span>
                 </div>
