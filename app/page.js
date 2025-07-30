@@ -40,7 +40,7 @@ export default function Home() {
     setAuthError("");
     setLoading(true);
     try {
-      const res = await fetch("https://yzbs5m62yw9odw-8000.proxy.runpod.net/login", {
+      const res = await fetch("http://localhost:8000/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: loginEmail, password: loginPassword }),
@@ -50,6 +50,8 @@ export default function Home() {
         setAuthError(err.detail || "Invalid email or password. Please try again.");
         return;
       }
+      const data = await res.json();
+      localStorage.setItem('token', data.access_token);
       setShowLogin(false);
       setLoginEmail("");
       setLoginPassword("");
@@ -59,7 +61,6 @@ export default function Home() {
         setTimeout(() => setLoginSuccess(false), 4000);
         setJustSignedUp(false);
       }
-      // TODO: Token or user info can be stored here
     } catch (err) {
       setAuthError("Connection error. Please check your internet and try again.");
     } finally {
@@ -83,7 +84,7 @@ export default function Home() {
     
     setLoading(true);
     try {
-      const res = await fetch("https://yzbs5m62yw9odw-8000.proxy.runpod.net/signup", {
+      const res = await fetch("http://localhost:8000/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: signupEmail, password: signupPassword }),
@@ -135,9 +136,12 @@ export default function Home() {
     setResult("");
 
     try {
-      const response = await fetch('https://yzbs5m62yw9odw-8000.proxy.runpod.net/humanize', {
+      const response = await fetch('http://localhost:8000/humanize', {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem('token')}` 
+        },
         body: JSON.stringify({
           text: inputText,
           tone: tone,
