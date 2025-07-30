@@ -327,35 +327,35 @@ export default function Home() {
         <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
         <div className="flex items-center gap-3 sm:gap-4 relative z-10">
           <div className="relative">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 via-purple-500 to-indigo-600 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-2xl shadow-blue-500/25">
-              <svg className="w-6 h-6 sm:w-7 sm:h-7" viewBox="0 0 64 64">
-                {/* Speech bubble base with better shape */}
-                <path d="M14 22 Q14 14 22 14 L42 14 Q50 14 50 22 L50 38 Q50 46 42 46 L22 46 Q14 46 14 38 Z" fill="#ffffff" stroke="#d1d5db" stroke-width="0.8"/>
+            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-blue-500 via-purple-500 to-indigo-600 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-2xl shadow-blue-500/25">
+              <svg className="w-8 h-8 sm:w-10 sm:h-10" viewBox="0 0 64 64">
+                {/* Speech bubble base - larger and clearer */}
+                <path d="M12 20 Q12 12 20 12 L44 12 Q52 12 52 20 L52 40 Q52 48 44 48 L20 48 Q12 48 12 40 Z" fill="#ffffff" stroke="#9ca3af" stroke-width="1.2"/>
                 
-                {/* Speech bubble tail - more natural */}
-                <path d="M22 46 L18 52 L22 56 L26 52 Z" fill="#ffffff" stroke="#d1d5db" stroke-width="0.8"/>
+                {/* Speech bubble tail - larger */}
+                <path d="M20 48 L16 56 L20 64 L24 56 Z" fill="#ffffff" stroke="#9ca3af" stroke-width="1.2"/>
                 
-                {/* Human head profile - better proportions */}
-                <ellipse cx="32" cy="32" rx="7" ry="9" fill="#f8fafc" stroke="#cbd5e1" stroke-width="0.8"/>
+                {/* Human head profile - larger and clearer */}
+                <ellipse cx="32" cy="34" rx="8" ry="10" fill="#f8fafc" stroke="#9ca3af" stroke-width="1.2"/>
                 
-                {/* Human face features - more detailed */}
-                <circle cx="36" cy="30" r="1.2" fill="#374151"/>
-                <path d="M30 33 Q33 35 36 33" fill="none" stroke="#374151" stroke-width="1.8" stroke-linecap="round"/>
+                {/* Human face features - larger and more visible */}
+                <circle cx="38" cy="32" r="1.8" fill="#1f2937"/>
+                <path d="M28 36 Q32 38 36 36" fill="none" stroke="#1f2937" stroke-width="2.5" stroke-linecap="round"/>
                 
-                {/* Enhanced spark/glow inside head */}
-                <circle cx="32" cy="28" r="2.5" fill="#fbbf24" opacity="0.9"/>
-                <circle cx="32" cy="28" r="1.8" fill="#fde047" opacity="0.8"/>
-                <circle cx="32" cy="28" r="1" fill="#fef3c7" opacity="0.7"/>
-                <circle cx="32" cy="28" r="0.5" fill="#ffffff" opacity="0.9"/>
+                {/* Enhanced spark/glow - larger and more prominent */}
+                <circle cx="32" cy="30" r="3.5" fill="#fbbf24" opacity="0.9"/>
+                <circle cx="32" cy="30" r="2.5" fill="#fde047" opacity="0.8"/>
+                <circle cx="32" cy="30" r="1.5" fill="#fef3c7" opacity="0.7"/>
+                <circle cx="32" cy="30" r="0.8" fill="#ffffff" opacity="0.9"/>
                 
-                {/* AI input side - more visible pixels */}
-                <rect x="16" y="18" width="2" height="2" fill="#3b82f6" opacity="0.6"/>
-                <rect x="19" y="18" width="2" height="2" fill="#3b82f6" opacity="0.4"/>
-                <rect x="22" y="18" width="2" height="2" fill="#3b82f6" opacity="0.2"/>
+                {/* AI input side - larger and more visible */}
+                <rect x="14" y="16" width="3" height="3" fill="#3b82f6" opacity="0.8"/>
+                <rect x="18" y="16" width="3" height="3" fill="#3b82f6" opacity="0.6"/>
+                <rect x="22" y="16" width="3" height="3" fill="#3b82f6" opacity="0.4"/>
                 
-                {/* Human output side - fluid lines */}
-                <path d="M40 18 Q42 20 44 18" fill="none" stroke="#10b981" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
-                <path d="M40 22 Q42 24 44 22" fill="none" stroke="#10b981" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+                {/* Human output side - larger and more visible */}
+                <path d="M42 16 Q44 18 46 16" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" opacity="0.8"/>
+                <path d="M42 20 Q44 22 46 20" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" opacity="0.8"/>
               </svg>
             </div>
             <div className="absolute -inset-1 bg-gradient-to-br from-blue-400 to-purple-600 rounded-xl sm:rounded-2xl blur opacity-30 animate-pulse"></div>
