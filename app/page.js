@@ -329,7 +329,23 @@ export default function Home() {
         <div className="flex items-center gap-3 sm:gap-4 relative z-10">
           <div className="relative">
             <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 via-purple-500 to-indigo-600 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-2xl shadow-blue-500/25">
-              <span className="text-white text-xl sm:text-2xl font-bold">H</span>
+              <svg className="w-6 h-6 sm:w-7 sm:h-7 text-white" viewBox="0 0 64 64" fill="currentColor">
+                {/* Speech bubble base */}
+                <path d="M12 24 Q12 16 20 16 L44 16 Q52 16 52 24 L52 36 Q52 44 44 44 L20 44 Q12 44 12 36 Z" fill="currentColor" opacity="0.9"/>
+                
+                {/* Speech bubble tail */}
+                <path d="M20 44 L16 48 L20 52 L24 48 Z" fill="currentColor" opacity="0.9"/>
+                
+                {/* Human head profile */}
+                <ellipse cx="32" cy="30" rx="6" ry="8" fill="currentColor" opacity="0.7"/>
+                
+                {/* Human face features */}
+                <circle cx="35" cy="28" r="1" fill="currentColor" opacity="0.9"/>
+                <path d="M29 31 Q32 33 35 31" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.9"/>
+                
+                {/* Spark/glow inside head */}
+                <circle cx="32" cy="26" r="1.5" fill="currentColor" opacity="0.8"/>
+              </svg>
             </div>
             <div className="absolute -inset-1 bg-gradient-to-br from-blue-400 to-purple-600 rounded-xl sm:rounded-2xl blur opacity-30 animate-pulse"></div>
           </div>
