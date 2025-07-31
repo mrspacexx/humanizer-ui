@@ -584,10 +584,10 @@ export default function Home() {
                       <span className="text-green-600 font-medium"> (Power Mode: {totalWordsUsed}/2,000)</span>
                     )}
                     {activeMode === "humanize" && !isLoggedIn && (
-                      <span className="text-blue-600 font-medium"> (Normal Mode: {totalWordsUsed}/500)</span>
+                      <span className="text-blue-600 font-medium"> (Humanize: {totalWordsUsed}/500)</span>
                     )}
                     {activeMode === "humanize" && isLoggedIn && (
-                      <span className="text-green-600 font-medium"> (Normal Mode: {totalWordsUsed}/10,000)</span>
+                      <span className="text-green-600 font-medium"> (Humanize: {totalWordsUsed}/10,000)</span>
                     )}
                   </span>
                 </div>
@@ -621,18 +621,7 @@ export default function Home() {
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                           </svg>
-                          Humanize
-                        </div>
-                      </button>
-                      <button 
-                        className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-medium transition-all ${activeMode === 'paraphrase' ? 'bg-orange-100 text-orange-800 border-2 border-orange-200' : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-orange-300'}`} 
-                        onClick={() => setActiveMode('paraphrase')}
-                      >
-                        <div className="flex items-center gap-2">
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                          </svg>
-                          Paraphrase
+                          Normal
                         </div>
                       </button>
                       <button 
@@ -644,6 +633,17 @@ export default function Home() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                           </svg>
                           Power
+                        </div>
+                      </button>
+                      <button 
+                        className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-medium transition-all ${activeMode === 'paraphrase' ? 'bg-orange-100 text-orange-800 border-2 border-orange-200' : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-orange-300'}`} 
+                        onClick={() => setActiveMode('paraphrase')}
+                      >
+                        <div className="flex items-center gap-2">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                          </svg>
+                          Paraphrase
                         </div>
                       </button>
                     </div>
