@@ -19,7 +19,22 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
   const [wordLimitError, setWordLimitError] = useState(false);
-  const [totalWordsUsed, setTotalWordsUsed] = useState(0);
+  const [totalWordsUsed, setTotalWordsUsed] = useState(() => {
+    // Anonim kullanıcılar için localStorage'dan kelime sayısını al
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('totalWordsUsed');
+      return saved ? parseInt(saved, 10) : 0;
+    }
+    return 0;
+  });
+
+  // Anonim kullanıcılar için kelime sayısını localStorage'a kaydet
+  const updateTotalWordsUsed = (newValue) => {
+    setTotalWordsUsed(newValue);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('totalWordsUsed', newValue.toString());
+    }
+  };
   const [activeMode, setActiveMode] = useState("humanize"); // humanize, power, paraphrase
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   // Login/Signup modal state
@@ -195,6 +210,8 @@ export default function Home() {
     setIsAdmin(false);
     setUserUsage(0);
     setUserPlan("free");
+    // Anonim kullanıcılar için kelime sayısını sıfırla
+    updateTotalWordsUsed(0);
   };
 
   const handleSubmit = async () => {
@@ -270,7 +287,7 @@ export default function Home() {
       
       // Giriş yapmayan kullanıcılar için toplam kelime sayısını güncelle
       if (!isLoggedIn) {
-        setTotalWordsUsed(prev => prev + wordCount);
+        updateTotalWordsUsed(totalWordsUsed + wordCount);
       } else {
         // Giriş yapan kullanıcılar için usage'ı güncelle
         setUserUsage(prev => prev + wordCount);
