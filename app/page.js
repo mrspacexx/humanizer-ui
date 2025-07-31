@@ -21,6 +21,7 @@ export default function Home() {
   const [wordLimitError, setWordLimitError] = useState(false);
   const [totalWordsUsed, setTotalWordsUsed] = useState(0);
   const [usePowerMode, setUsePowerMode] = useState(false);
+  const [useParaphrase, setUseParaphrase] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("Home");
   // Login/Signup modal state
@@ -166,7 +167,7 @@ export default function Home() {
   };
 
   const handleSubmit = async () => {
-    // Per request 200 kelime limiti (hem giriş yapan hem yapmayan için)
+    // Per request 200 kelime limiti (tüm endpoint'ler için)
     const wordCount = inputText.trim().split(/\s+/).length;
     if (wordCount > 200) {
       setWordLimitError(true);
@@ -174,21 +175,20 @@ export default function Home() {
       return;
     }
     
-    // Normal Mode: Giriş yapmayan kullanıcılar için 1000 kelime limiti
-    if (!usePowerMode && !isLoggedIn && (totalWordsUsed + wordCount) > 1000) {
+    // Aylık word limit kontrolü
+    let monthlyLimit;
+    if (useParaphrase) {
+      monthlyLimit = isLoggedIn ? 10000 : 1000; // Paraphrase: 10k/1k
+    } else if (usePowerMode) {
+      monthlyLimit = isLoggedIn ? 2000 : 200; // Power Mode: 2k/200
+    } else {
+      monthlyLimit = isLoggedIn ? 10000 : 500; // Normal Mode: 10k/500
+    }
+    
+    if (!isLoggedIn && (totalWordsUsed + wordCount) > monthlyLimit) {
       setWordLimitError(true);
       setResult("");
       return;
-    }
-    
-    // Power Mode limitleri sadece Power Mode kullanılıyorsa kontrol et
-    if (usePowerMode) {
-      const powerLimit = isLoggedIn ? 1000 : 200;
-      if (!isLoggedIn && (totalWordsUsed + wordCount) > powerLimit) {
-        setWordLimitError(true);
-        setResult("");
-        return;
-      }
     }
     
     setWordLimitError(false);
@@ -196,7 +196,16 @@ export default function Home() {
     setResult("");
 
     try {
-      const endpoint = usePowerMode ? 'https://g2ixr6izoi1zdq-8000.proxy.runpod.net/humanize/power' : 'https://g2ixr6izoi1zdq-8000.proxy.runpod.net/humanize';
+      // Endpoint seçimi
+      let endpoint;
+      if (useParaphrase) {
+        endpoint = 'https://g2ixr6izoi1zdq-8000.proxy.runpod.net/paraphrase';
+      } else if (usePowerMode) {
+        endpoint = 'https://g2ixr6izoi1zdq-8000.proxy.runpod.net/humanize/power';
+      } else {
+        endpoint = 'https://g2ixr6izoi1zdq-8000.proxy.runpod.net/humanize';
+      }
+      
       const response = await fetch(endpoint, {
         method: "POST",
         headers: { 
@@ -205,7 +214,7 @@ export default function Home() {
         },
         body: JSON.stringify({
           text: inputText,
-          tone: tone,
+          tone: useParaphrase ? undefined : tone, // Paraphrase için tone gönderme
         }),
       });
 
@@ -550,9 +559,11 @@ export default function Home() {
                 {wordLimitError && (
                   <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
                     ⚠️ {inputText.trim().split(/\s+/).length > 200 ? "Maximum 200 words per request allowed." : 
+                      useParaphrase ? 
+                        `You've reached your ${isLoggedIn ? '10,000' : '1,000'} word limit for Paraphrase Mode. Sign up for unlimited access!` :
                       usePowerMode ? 
-                        `You've reached your ${isLoggedIn ? '1000' : '200'} word limit for Power Mode. Sign up for unlimited access!` :
-                        `You've reached your 1000 word limit for Normal Mode. Sign up for unlimited access!`
+                        `You've reached your ${isLoggedIn ? '2,000' : '200'} word limit for Power Mode. Sign up for unlimited access!` :
+                        `You've reached your ${isLoggedIn ? '10,000' : '500'} word limit for Normal Mode. Sign up for unlimited access!`
                     }
                   </div>
                 )}
@@ -561,47 +572,75 @@ export default function Home() {
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-sm text-gray-600">
                     {inputText.trim().split(/\s+/).filter(word => word.length > 0).length} words / 200 per request
+                    {useParaphrase && !isLoggedIn && (
+                      <span className="text-orange-600 font-medium"> (Paraphrase: {totalWordsUsed}/1,000)</span>
+                    )}
+                    {useParaphrase && isLoggedIn && (
+                      <span className="text-green-600 font-medium"> (Paraphrase: {totalWordsUsed}/10,000)</span>
+                    )}
                     {usePowerMode && !isLoggedIn && (
                       <span className="text-orange-600 font-medium"> (Power Mode: {totalWordsUsed}/200)</span>
                     )}
                     {usePowerMode && isLoggedIn && (
-                      <span className="text-green-600 font-medium"> (Power Mode: {totalWordsUsed}/1000)</span>
+                      <span className="text-green-600 font-medium"> (Power Mode: {totalWordsUsed}/2,000)</span>
                     )}
-                    {!usePowerMode && !isLoggedIn && (
-                      <span className="text-blue-600 font-medium"> (Normal Mode: {totalWordsUsed}/1000)</span>
+                    {!useParaphrase && !usePowerMode && !isLoggedIn && (
+                      <span className="text-blue-600 font-medium"> (Normal Mode: {totalWordsUsed}/500)</span>
                     )}
-                    {!usePowerMode && isLoggedIn && (
-                      <span className="text-green-600 font-medium"> (Normal Mode: Unlimited)</span>
+                    {!useParaphrase && !usePowerMode && isLoggedIn && (
+                      <span className="text-green-600 font-medium"> (Normal Mode: {totalWordsUsed}/10,000)</span>
                     )}
                   </span>
                 </div>
 
                 {/* Bottom Controls */}
                 <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                    <span className="text-lg font-semibold text-gray-700">Tone:</span>
-                    <div className="flex flex-wrap gap-2">
-                      <button className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-medium transition-all ${tone === 'Normal' ? 'bg-green-100 text-green-800 border-2 border-green-200' : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-green-300'}`} onClick={() => setTone('Normal')}>
-                        Normal
-                      </button>
-                      <button className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-medium transition-all ${tone === 'Formal' ? 'bg-green-100 text-green-800 border-2 border-green-200' : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-green-300'}`} onClick={() => setTone('Formal')}>
-                        Formal
-                      </button>
-                      <button className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-medium transition-all ${tone === 'Academic' ? 'bg-green-100 text-green-800 border-2 border-green-200' : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-green-300'}`} onClick={() => setTone('Academic')}>
-                        Academic
+                  {!useParaphrase && (
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                      <span className="text-lg font-semibold text-gray-700">Tone:</span>
+                      <div className="flex flex-wrap gap-2">
+                        <button className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-medium transition-all ${tone === 'Normal' ? 'bg-green-100 text-green-800 border-2 border-green-200' : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-green-300'}`} onClick={() => setTone('Normal')}>
+                          Normal
+                        </button>
+                        <button className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-medium transition-all ${tone === 'Formal' ? 'bg-green-100 text-green-800 border-2 border-green-200' : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-green-300'}`} onClick={() => setTone('Formal')}>
+                          Formal
+                        </button>
+                        <button className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-medium transition-all ${tone === 'Academic' ? 'bg-green-100 text-green-800 border-2 border-green-200' : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-green-300'}`} onClick={() => setTone('Academic')}>
+                          Academic
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Mode Toggles */}
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                    {/* Power Mode Toggle */}
+                    <div className="flex items-center gap-3">
+                      <span className="text-sm font-medium text-gray-700">Power Mode:</span>
+                      <button 
+                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${usePowerMode ? 'bg-purple-100 text-purple-800 border-2 border-purple-200' : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-purple-300'}`} 
+                        onClick={() => {
+                          setUsePowerMode(!usePowerMode);
+                          if (!usePowerMode) setUseParaphrase(false); // Power mode açılırsa paraphrase kapat
+                        }}
+                      >
+                        {usePowerMode ? '⚡ ON' : '⚡ OFF'}
                       </button>
                     </div>
-                  </div>
-                  
-                  {/* Power Mode Toggle */}
-                  <div className="flex items-center gap-3">
-                    <span className="text-sm font-medium text-gray-700">Power Mode:</span>
-                    <button 
-                      className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${usePowerMode ? 'bg-purple-100 text-purple-800 border-2 border-purple-200' : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-purple-300'}`} 
-                      onClick={() => setUsePowerMode(!usePowerMode)}
-                    >
-                      {usePowerMode ? '⚡ ON' : '⚡ OFF'}
-                    </button>
+                    
+                    {/* Paraphrase Mode Toggle */}
+                    <div className="flex items-center gap-3">
+                      <span className="text-sm font-medium text-gray-700">Paraphrase:</span>
+                      <button 
+                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${useParaphrase ? 'bg-orange-100 text-orange-800 border-2 border-orange-200' : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-orange-300'}`} 
+                        onClick={() => {
+                          setUseParaphrase(!useParaphrase);
+                          if (!useParaphrase) setUsePowerMode(false); // Paraphrase açılırsa power mode kapat
+                        }}
+                      >
+                        {useParaphrase ? '🔄 ON' : '🔄 OFF'}
+                      </button>
+                    </div>
                   </div>
                   
                   <div className="flex w-full lg:w-auto">
@@ -613,14 +652,18 @@ export default function Home() {
                       {loading ? (
                         <div className="flex items-center gap-2 sm:gap-3">
                           <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                          <span className="text-sm sm:text-base">Humanizing...</span>
+                          <span className="text-sm sm:text-base">
+                            {useParaphrase ? 'Paraphrasing...' : 'Humanizing...'}
+                          </span>
                         </div>
                       ) : (
                         <div className="flex items-center gap-2">
                           <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                           </svg>
-                          <span className="text-sm sm:text-base">Humanize</span>
+                          <span className="text-sm sm:text-base">
+                            {useParaphrase ? 'Paraphrase' : 'Humanize'}
+                          </span>
                         </div>
                       )}
                     </Button>
@@ -631,7 +674,9 @@ export default function Home() {
                 {result && (
                   <div className="mt-6 sm:mt-8 p-4 sm:p-6 lg:p-8 bg-gray-50 rounded-2xl border border-gray-200">
                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4 sm:mb-6">
-                      <h4 className="text-lg sm:text-xl font-bold text-gray-800">Humanized Output</h4>
+                      <h4 className="text-lg sm:text-xl font-bold text-gray-800">
+                        {useParaphrase ? 'Paraphrased Output' : 'Humanized Output'}
+                      </h4>
                       <Button
                         onClick={handleCopy}
                         variant="outline"
