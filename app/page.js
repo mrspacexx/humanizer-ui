@@ -214,7 +214,7 @@ export default function Home() {
         },
         body: JSON.stringify({
           text: inputText,
-          tone: useParaphrase ? undefined : tone, // Paraphrase için tone gönderme
+          tone: tone, // Tüm modlar için tone gönder
         }),
       });
 
@@ -595,22 +595,20 @@ export default function Home() {
 
                 {/* Bottom Controls */}
                 <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-                  {!useParaphrase && (
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                      <span className="text-lg font-semibold text-gray-700">Tone:</span>
-                      <div className="flex flex-wrap gap-2">
-                        <button className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-medium transition-all ${tone === 'Normal' ? 'bg-green-100 text-green-800 border-2 border-green-200' : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-green-300'}`} onClick={() => setTone('Normal')}>
-                          Normal
-                        </button>
-                        <button className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-medium transition-all ${tone === 'Formal' ? 'bg-green-100 text-green-800 border-2 border-green-200' : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-green-300'}`} onClick={() => setTone('Formal')}>
-                          Formal
-                        </button>
-                        <button className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-medium transition-all ${tone === 'Academic' ? 'bg-green-100 text-green-800 border-2 border-green-200' : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-green-300'}`} onClick={() => setTone('Academic')}>
-                          Academic
-                        </button>
-                      </div>
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                    <span className="text-lg font-semibold text-gray-700">Tone:</span>
+                    <div className="flex flex-wrap gap-2">
+                      <button className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-medium transition-all ${tone === 'Normal' ? 'bg-green-100 text-green-800 border-2 border-green-200' : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-green-300'}`} onClick={() => setTone('Normal')}>
+                        Normal
+                      </button>
+                      <button className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-medium transition-all ${tone === 'Formal' ? 'bg-green-100 text-green-800 border-2 border-green-200' : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-green-300'}`} onClick={() => setTone('Formal')}>
+                        Formal
+                      </button>
+                      <button className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-medium transition-all ${tone === 'Academic' ? 'bg-green-100 text-green-800 border-2 border-green-200' : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-green-300'}`} onClick={() => setTone('Academic')}>
+                        Academic
+                      </button>
                     </div>
-                  )}
+                  </div>
                   
                   {/* Mode Toggles */}
                   <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
