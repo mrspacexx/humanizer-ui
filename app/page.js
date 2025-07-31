@@ -640,7 +640,7 @@ export default function Home() {
                       activeMode === "paraphrase" ? 
                         `You've reached your ${isLoggedIn ? '10,000' : '1,000'} word limit for Paraphrase Mode. Sign up for unlimited access!` :
                       activeMode === "power" ? 
-                        `You've reached your ${isLoggedIn ? '2,000' : '200'} word limit for Power Mode. Sign up for unlimited access!` :
+                        `You've reached your ${isLoggedIn ? '2,000' : '200'} word limit for Power Mode. Sign up for more access!` :
                         `You've reached your ${isLoggedIn ? '10,000' : '500'} word limit for Normal Mode. Sign up for unlimited access!`
                     }
                   </div>
