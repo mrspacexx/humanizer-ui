@@ -25,7 +25,8 @@ export default function AdminPanel() {
 
   const checkAdminStatus = async (token) => {
     try {
-      const response = await fetch("https://g2ixr6izoi1zdq-8000.proxy.runpod.net/admin/check", {
+      // Try to fetch users - if we get 403, user is not admin
+      const response = await fetch("https://g2ixr6izoi1zdq-8000.proxy.runpod.net/admin/users", {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -36,9 +37,13 @@ export default function AdminPanel() {
       if (response.ok) {
         setIsAdmin(true);
         setAdminToken(token);
-        fetchUsers(token);
-      } else {
+        const data = await response.json();
+        setUsers(data.users || []);
+      } else if (response.status === 403) {
         setError("Access denied. Admin privileges required.");
+        setLoading(false);
+      } else {
+        setError("Failed to verify admin status.");
         setLoading(false);
       }
     } catch (error) {
@@ -47,32 +52,11 @@ export default function AdminPanel() {
     }
   };
 
-  const fetchUsers = async (token) => {
-    try {
-      const response = await fetch("https://g2ixr6izoi1zdq-8000.proxy.runpod.net/admin/users", {
-        method: "GET",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json"
-        }
-      });
-      
-      if (response.ok) {
-        const data = await response.json();
-        setUsers(data.users || []);
-      } else {
-        setError("Failed to fetch users");
-      }
-    } catch (error) {
-      setError("Connection error while fetching users");
-    } finally {
-      setLoading(false);
-    }
-  };
+
 
   const getUserDetails = async (userId) => {
     try {
-      const response = await fetch(`https://g2ixr6izoi1zdq-8000.proxy.runpod.net/admin/users/${userId}`, {
+      const response = await fetch(`https://g2ixr6izoi1zdq-8000.proxy.runpod.net/admin/user/${userId}`, {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${adminToken}`,
@@ -93,7 +77,7 @@ export default function AdminPanel() {
 
   const makeUserAdmin = async (userId) => {
     try {
-      const response = await fetch(`https://g2ixr6izoi1zdq-8000.proxy.runpod.net/admin/users/${userId}/admin`, {
+      const response = await fetch(`https://g2ixr6izoi1zdq-8000.proxy.runpod.net/admin/make-admin/${userId}`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${adminToken}`,
@@ -103,7 +87,18 @@ export default function AdminPanel() {
       
       if (response.ok) {
         // Refresh users list
-        fetchUsers(adminToken);
+        const refreshResponse = await fetch("https://g2ixr6izoi1zdq-8000.proxy.runpod.net/admin/users", {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${adminToken}`,
+            "Content-Type": "application/json"
+          }
+        });
+        
+        if (refreshResponse.ok) {
+          const data = await refreshResponse.json();
+          setUsers(data.users || []);
+        }
         setSelectedUser(null);
       } else {
         setError("Failed to update user admin status");
@@ -115,7 +110,7 @@ export default function AdminPanel() {
 
   const resetUserUsage = async (userId) => {
     try {
-      const response = await fetch(`https://g2ixr6izoi1zdq-8000.proxy.runpod.net/admin/users/${userId}/reset-usage`, {
+      const response = await fetch(`https://g2ixr6izoi1zdq-8000.proxy.runpod.net/admin/reset-usage/${userId}`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${adminToken}`,
@@ -125,7 +120,18 @@ export default function AdminPanel() {
       
       if (response.ok) {
         // Refresh users list
-        fetchUsers(adminToken);
+        const refreshResponse = await fetch("https://g2ixr6izoi1zdq-8000.proxy.runpod.net/admin/users", {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${adminToken}`,
+            "Content-Type": "application/json"
+          }
+        });
+        
+        if (refreshResponse.ok) {
+          const data = await refreshResponse.json();
+          setUsers(data.users || []);
+        }
         setSelectedUser(null);
       } else {
         setError("Failed to reset user usage");
