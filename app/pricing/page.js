@@ -84,7 +84,6 @@ export default function Pricing() {
           <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Simple Pricing</h2>
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             <div className="border border-blue-200 rounded-2xl p-8 flex flex-col items-center bg-gradient-to-br from-blue-50 to-indigo-50 relative">
-              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white px-4 py-1 rounded-full text-sm font-medium">Most Popular</div>
               <h3 className="text-2xl font-bold text-blue-700 mb-2">Free</h3>
               <p className="text-gray-700 mb-6 text-center">Perfect for getting started with text humanization.</p>
               <ul className="text-gray-600 text-sm mb-8 list-none space-y-3">
@@ -111,7 +110,7 @@ export default function Pricing() {
               <button className="w-full px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg">Get Started Free</button>
             </div>
             <div className="border border-purple-200 rounded-2xl p-8 flex flex-col items-center bg-gradient-to-br from-purple-50 to-pink-50 relative">
-              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-purple-600 text-white px-4 py-1 rounded-full text-sm font-medium">Pro</div>
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-purple-600 text-white px-4 py-1 rounded-full text-sm font-medium">Most Popular</div>
               <h3 className="text-2xl font-bold text-purple-700 mb-2">Pro</h3>
               <p className="text-gray-700 mb-6 text-center">Advanced features for power users and professionals.</p>
               <ul className="text-gray-600 text-sm mb-8 list-none space-y-3">
