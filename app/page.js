@@ -38,6 +38,7 @@ export default function Home() {
   const [justSignedUp, setJustSignedUp] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userEmail, setUserEmail] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
 
   // Check if user is already logged in on page load
   useEffect(() => {
@@ -76,6 +77,12 @@ export default function Home() {
       setLoginEmail("");
       setLoginPassword("");
       setAuthError("");
+      
+      // Check if user is admin
+      if (data.is_admin) {
+        setIsAdmin(true);
+      }
+      
       if (justSignedUp) {
         setLoginSuccess(true);
         setTimeout(() => setLoginSuccess(false), 4000);
@@ -163,6 +170,7 @@ export default function Home() {
     localStorage.removeItem('token');
     setIsLoggedIn(false);
     setUserEmail("");
+    setIsAdmin(false);
   };
 
   const handleSubmit = async () => {
@@ -496,6 +504,14 @@ export default function Home() {
           ) : (
             <div className="flex items-center gap-4">
               <span className="text-white/80 text-sm">Welcome, {userEmail}</span>
+              {isAdmin && (
+                <button 
+                  onClick={() => window.location.href = "/admin"}
+                  className="px-4 py-2 rounded-xl border-2 border-purple-300 text-purple-300 font-semibold bg-purple-500/10 backdrop-blur-sm hover:bg-purple-500/20 transition-all duration-300"
+                >
+                  Admin Panel
+                </button>
+              )}
               <button className="px-6 py-2 rounded-xl border-2 border-white/30 text-white font-semibold bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all duration-300" onClick={handleLogout}>
                 Logout
               </button>
@@ -523,6 +539,14 @@ export default function Home() {
             ) : (
               <div className="flex flex-col gap-3 w-full mt-4 pt-4 border-t border-gray-200">
                 <span className="text-gray-800 text-sm font-medium">Welcome, {userEmail}</span>
+                {isAdmin && (
+                  <button 
+                    onClick={() => { window.location.href = "/admin"; setMobileMenuOpen(false); }}
+                    className="w-full px-4 py-3 rounded-xl border-2 border-purple-600 text-purple-600 font-semibold bg-white hover:bg-purple-50 transition-all"
+                  >
+                    Admin Panel
+                  </button>
+                )}
                 <button className="w-full px-4 py-3 rounded-xl border-2 border-red-600 text-red-600 font-semibold bg-white hover:bg-red-50 transition-all" onClick={() => { handleLogout(); setMobileMenuOpen(false); }}>Logout</button>
               </div>
             )}
