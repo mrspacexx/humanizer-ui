@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
-export default function VerifyPage() {
+function VerifyPageContent() {
   const [verificationStatus, setVerificationStatus] = useState("loading"); // loading, success, error
   const [message, setMessage] = useState("");
   const searchParams = useSearchParams();
@@ -142,5 +142,22 @@ export default function VerifyPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function VerifyPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 font-sans flex items-center justify-center p-4">
+        <div className="relative z-10 bg-white/10 backdrop-blur-2xl border border-white/20 rounded-3xl p-8 sm:p-12 max-w-md w-full shadow-2xl">
+          <div className="text-center">
+            <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+            <p className="text-white/80 mt-4">Loading...</p>
+          </div>
+        </div>
+      </div>
+    }>
+      <VerifyPageContent />
+    </Suspense>
   );
 } 
