@@ -25,6 +25,15 @@ export default function AdminPanel() {
   const checkAdminStatus = async (token) => {
     try {
       console.log("Checking admin status with token:", token ? "Token exists" : "No token");
+      console.log("Token value:", token);
+      console.log("Token length:", token ? token.length : 0);
+      
+      // Check if token looks valid (JWT tokens are usually long)
+      if (!token || token.length < 50) {
+        setError("Invalid token. Please login again.");
+        setLoading(false);
+        return;
+      }
       
       // Try to fetch users - if we get 403, user is not admin
       const response = await fetch("https://g2ixr6izoi1zdq-8000.proxy.runpod.net/admin/users", {
@@ -33,6 +42,11 @@ export default function AdminPanel() {
           "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json"
         }
+      });
+      
+      console.log("Request headers:", {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
       });
       
       console.log("Admin check response status:", response.status);
@@ -45,6 +59,11 @@ export default function AdminPanel() {
         setLoading(false);
       } else if (response.status === 403) {
         setError("Access denied. Admin privileges required.");
+        setLoading(false);
+      } else if (response.status === 401) {
+        const errorText = await response.text();
+        console.log("Admin check 401 error response:", errorText);
+        setError("Token expired or invalid. Please login again.");
         setLoading(false);
       } else {
         const errorText = await response.text();
