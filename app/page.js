@@ -1060,6 +1060,176 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* Admin Panel Section - Only visible to admins */}
+        {isAdmin && (
+          <section className="py-16 sm:py-20">
+            <div className="max-w-6xl mx-auto px-2 sm:px-4">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+                  <span className="bg-gradient-to-r from-purple-300 to-pink-300 bg-clip-text text-transparent">
+                    Admin Panel
+                  </span>
+                </h2>
+                <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+                  Manage users, monitor usage, and control system settings
+                </p>
+              </div>
+
+              <div className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-3xl p-6 sm:p-8">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  {/* Quick Stats */}
+                  <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-white font-semibold text-lg">System Overview</h3>
+                      <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                        <svg className="w-5 h-5 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="flex justify-between text-white/80">
+                        <span>Total Users</span>
+                        <span className="font-semibold">-</span>
+                      </div>
+                      <div className="flex justify-between text-white/80">
+                        <span>Active Today</span>
+                        <span className="font-semibold">-</span>
+                      </div>
+                      <div className="flex justify-between text-white/80">
+                        <span>Total Usage</span>
+                        <span className="font-semibold">-</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Quick Actions */}
+                  <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-white font-semibold text-lg">Quick Actions</h3>
+                      <div className="w-8 h-8 bg-orange-500/20 rounded-lg flex items-center justify-center">
+                        <svg className="w-5 h-5 text-orange-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"></path>
+                        </svg>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <button 
+                        onClick={() => window.location.href = "/admin"}
+                        className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-4 rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all duration-300 shadow-lg hover:shadow-xl"
+                      >
+                        Manage Users
+                      </button>
+                      <button 
+                        onClick={() => window.location.href = "/admin"}
+                        className="w-full bg-gradient-to-r from-orange-600 to-red-600 text-white font-semibold py-3 px-4 rounded-xl hover:from-orange-700 hover:to-red-700 transition-all duration-300 shadow-lg hover:shadow-xl"
+                      >
+                        View Analytics
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* System Status */}
+                  <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-white font-semibold text-lg">System Status</h3>
+                      <div className="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center">
+                        <svg className="w-5 h-5 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-white/80">API Status</span>
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                          <span className="text-green-400 text-sm font-medium">Online</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-white/80">Database</span>
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                          <span className="text-green-400 text-sm font-medium">Connected</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-white/80">Security</span>
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                          <span className="text-green-400 text-sm font-medium">Active</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Admin Notice */}
+                <div className="mt-6 p-4 bg-purple-500/10 border border-purple-500/20 rounded-xl">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                      <svg className="w-5 h-5 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="text-white font-semibold">Admin Access</h4>
+                      <p className="text-white/70 text-sm">
+                        You have full administrative privileges. Use the buttons above to manage the system.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Contact Section */}
+        <section className="py-16 sm:py-20">
+          <div className="max-w-6xl mx-auto px-2 sm:px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+                <span className="bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent">
+                  Contact Us
+                </span>
+              </h2>
+              <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+                Have questions or need support? We're here to help you get the most out of our AI text humanizer.
+              </p>
+            </div>
+
+            <div className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-3xl p-6 sm:p-8">
+              <form className="space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <input 
+                    type="text" 
+                    placeholder="Your Name" 
+                    className="w-full px-4 py-3 rounded-xl border-2 border-white/20 bg-white/10 text-white placeholder-white/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 transition-all"
+                  />
+                  <input 
+                    type="email" 
+                    placeholder="Your Email" 
+                    className="w-full px-4 py-3 rounded-xl border-2 border-white/20 bg-white/10 text-white placeholder-white/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 transition-all"
+                  />
+                </div>
+                <textarea 
+                  rows={6} 
+                  placeholder="Your Message" 
+                  className="w-full px-4 py-3 rounded-xl border-2 border-white/20 bg-white/10 text-white placeholder-white/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 transition-all resize-none"
+                ></textarea>
+                <button className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl">
+                  Send Message
+                </button>
+              </form>
+              <div className="mt-6 sm:mt-8 text-center text-gray-500 text-sm sm:text-base">
+                Or email us directly at <a href="mailto:info@humanotext.com" className="text-blue-600 hover:underline font-medium">info@humanotext.com</a>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   );
