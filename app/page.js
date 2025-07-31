@@ -279,7 +279,7 @@ export default function Home() {
       // 429 Too Many Requests hatası kontrolü
       if (response.status === 429) {
         setWordLimitError(true);
-        setResult("⚠️ You've reached your monthly word limit. Please upgrade your plan for unlimited access.");
+        setResult("⚠️ You've reached your monthly word limit. Please sign up for unlimited access.");
         return;
       }
       
