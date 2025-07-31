@@ -983,8 +983,9 @@ export default function Home() {
           </section>
         )}
         
-        {/* FAQ Section */}
-        <section className="mb-8 bg-white/80 backdrop-blur-sm rounded-3xl border border-gray-200/50 p-4 sm:p-6 lg:p-10 shadow-xl">
+        {/* FAQ Section - Only show on Home tab */}
+        {activeTab === 'Home' && (
+          <section className="mb-8 bg-white/80 backdrop-blur-sm rounded-3xl border border-gray-200/50 p-4 sm:p-6 lg:p-10 shadow-xl">
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8 text-center">Frequently Asked Questions</h2>
           <div className="max-w-4xl mx-auto space-y-6">
             
@@ -1128,6 +1129,7 @@ export default function Home() {
             </div>
           </div>
         </section>
+        )}
 
         {/* Admin Panel Section - Only visible to admins */}
         {isAdmin && (
