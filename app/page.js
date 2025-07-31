@@ -840,6 +840,9 @@ export default function Home() {
             </div>
           </>
         )}
+
+
+
         {activeTab === 'Features' && (
           <section className="mb-8 bg-white/80 backdrop-blur-sm rounded-3xl border border-gray-200/50 p-10 shadow-xl">
             <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Advanced Features</h2>
