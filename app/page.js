@@ -22,7 +22,6 @@ export default function Home() {
   const [totalWordsUsed, setTotalWordsUsed] = useState(0);
   const [activeMode, setActiveMode] = useState("humanize"); // humanize, power, paraphrase
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("Home");
   // Login/Signup modal state
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
@@ -40,11 +39,7 @@ export default function Home() {
   const [userEmail, setUserEmail] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
   
-  // AI Detection States
-  const [detectionText, setDetectionText] = useState('');
-  const [detectionResult, setDetectionResult] = useState(null);
-  const [detectionLoading, setDetectionLoading] = useState(false);
-  const [detectionError, setDetectionError] = useState('');
+
 
   // Check if user is already logged in on page load
   useEffect(() => {
@@ -252,47 +247,7 @@ export default function Home() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // AI Detection Handler
-  const handleAIDetection = async () => {
-    const wordCount = detectionText.trim().split(/\s+/).length;
-    
-    if (wordCount < 80) {
-      setDetectionError("Minimum 80 words required for AI detection.");
-      return;
-    }
-    
-    if (wordCount > 1000) {
-      setDetectionError("Maximum 1000 words allowed for AI detection.");
-      return;
-    }
-    
-    setDetectionError('');
-    setDetectionLoading(true);
-    setDetectionResult(null);
-    
-    try {
-      const response = await fetch("https://g2ixr6izoi1zdq-8000.proxy.runpod.net/detect-ai", {
-        method: "POST",
-        headers: { 
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem('token')}` 
-        },
-        body: JSON.stringify({ text: detectionText }),
-      });
-      
-      const data = await response.json();
-      
-      if (response.ok) {
-        setDetectionResult(data);
-      } else {
-        setDetectionError(data.detail || "AI detection failed. Please try again.");
-      }
-    } catch (error) {
-      setDetectionError("Connection error. Please try again.");
-    } finally {
-      setDetectionLoading(false);
-    }
-  };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 font-sans relative overflow-hidden">
@@ -507,41 +462,27 @@ export default function Home() {
         </div>
         {/* Desktop Nav Links */}
         <div className="hidden md:flex items-center gap-10 relative z-10">
-          <button onClick={() => setActiveTab('Home')} className={`text-white/80 font-semibold hover:text-white transition-all duration-300 relative group ${activeTab === 'Home' ? 'text-white' : ''}`}>
+          <a href="/" className="text-white font-semibold hover:text-white transition-all duration-300 relative group">
             <span className="relative z-10">Home</span>
-            {activeTab === 'Home' && (
-              <div className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full shadow-lg shadow-blue-400/50"></div>
-            )}
+            <div className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full shadow-lg shadow-blue-400/50"></div>
             <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full transition-all duration-300 group-hover:w-full"></div>
-          </button>
-          <button onClick={() => setActiveTab('AI Detection')} className={`text-white/80 font-semibold hover:text-white transition-all duration-300 relative group ${activeTab === 'AI Detection' ? 'text-white' : ''}`}>
+          </a>
+          <a href="/ai-detection" className="text-white/80 font-semibold hover:text-white transition-all duration-300 relative group">
             <span className="relative z-10">AI Detection</span>
-            {activeTab === 'AI Detection' && (
-              <div className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full shadow-lg shadow-yellow-400/50"></div>
-            )}
             <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full transition-all duration-300 group-hover:w-full"></div>
-          </button>
-          <button onClick={() => setActiveTab('Features')} className={`text-white/80 font-semibold hover:text-white transition-all duration-300 relative group ${activeTab === 'Features' ? 'text-white' : ''}`}>
+          </a>
+          <a href="/features" className="text-white/80 font-semibold hover:text-white transition-all duration-300 relative group">
             <span className="relative z-10">Features</span>
-            {activeTab === 'Features' && (
-              <div className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full shadow-lg shadow-purple-400/50"></div>
-            )}
             <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full transition-all duration-300 group-hover:w-full"></div>
-          </button>
-          <button onClick={() => setActiveTab('Pricing')} className={`text-white/80 font-semibold hover:text-white transition-all duration-300 relative group ${activeTab === 'Pricing' ? 'text-white' : ''}`}>
+          </a>
+          <a href="/pricing" className="text-white/80 font-semibold hover:text-white transition-all duration-300 relative group">
             <span className="relative z-10">Pricing</span>
-            {activeTab === 'Pricing' && (
-              <div className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full shadow-lg shadow-green-400/50"></div>
-            )}
             <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full transition-all duration-300 group-hover:w-full"></div>
-          </button>
-          <button onClick={() => setActiveTab('Contact')} className={`text-white/80 font-semibold hover:text-white transition-all duration-300 relative group ${activeTab === 'Contact' ? 'text-white' : ''}`}>
+          </a>
+          <a href="/contact" className="text-white/80 font-semibold hover:text-white transition-all duration-300 relative group">
             <span className="relative z-10">Contact</span>
-            {activeTab === 'Contact' && (
-              <div className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-orange-400 to-red-500 rounded-full shadow-lg shadow-orange-400/50"></div>
-            )}
             <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-orange-400 to-red-500 rounded-full transition-all duration-300 group-hover:w-full"></div>
-          </button>
+          </a>
         </div>
         {/* Desktop Auth Buttons */}
         <div className="hidden md:flex items-center gap-4 relative z-10">
@@ -582,11 +523,11 @@ export default function Home() {
         {/* Mobile Menu */}
         {mobileMenuOpen && (
           <div className="absolute top-full left-0 w-full bg-white/95 backdrop-blur-xl border-b border-white/30 shadow-2xl flex flex-col items-start px-4 sm:px-6 py-4 gap-3 md:hidden z-50">
-            <button onClick={() => { setActiveTab('Home'); setMobileMenuOpen(false); }} className={`text-gray-800 font-medium hover:text-blue-600 transition-colors w-full text-left py-3 ${activeTab === 'Home' ? 'text-blue-600 font-semibold' : ''}`}>Home</button>
-            <button onClick={() => { setActiveTab('AI Detection'); setMobileMenuOpen(false); }} className={`text-gray-800 font-medium hover:text-blue-600 transition-colors w-full text-left py-3 ${activeTab === 'AI Detection' ? 'text-blue-600 font-semibold' : ''}`}>AI Detection</button>
-            <button onClick={() => { setActiveTab('Features'); setMobileMenuOpen(false); }} className={`text-gray-800 font-medium hover:text-blue-600 transition-colors w-full text-left py-3 ${activeTab === 'Features' ? 'text-blue-600 font-semibold' : ''}`}>Features</button>
-            <button onClick={() => { setActiveTab('Pricing'); setMobileMenuOpen(false); }} className={`text-gray-800 font-medium hover:text-blue-600 transition-colors w-full text-left py-3 ${activeTab === 'Pricing' ? 'text-blue-600 font-semibold' : ''}`}>Pricing</button>
-            <button onClick={() => { setActiveTab('Contact'); setMobileMenuOpen(false); }} className={`text-gray-800 font-medium hover:text-blue-600 transition-colors w-full text-left py-3 ${activeTab === 'Contact' ? 'text-blue-600 font-semibold' : ''}`}>Contact</button>
+            <a href="/" className="text-blue-600 font-semibold hover:text-blue-600 transition-colors w-full text-left py-3">Home</a>
+            <a href="/ai-detection" className="text-gray-800 font-medium hover:text-blue-600 transition-colors w-full text-left py-3">AI Detection</a>
+            <a href="/features" className="text-gray-800 font-medium hover:text-blue-600 transition-colors w-full text-left py-3">Features</a>
+            <a href="/pricing" className="text-gray-800 font-medium hover:text-blue-600 transition-colors w-full text-left py-3">Pricing</a>
+            <a href="/contact" className="text-gray-800 font-medium hover:text-blue-600 transition-colors w-full text-left py-3">Contact</a>
             {!isLoggedIn ? (
               <div className="flex gap-3 w-full mt-4 pt-4 border-t border-gray-200">
                 <button className="flex-1 px-4 py-3 rounded-xl border-2 border-blue-600 text-blue-600 font-semibold bg-white hover:bg-blue-50 transition-all" onClick={() => { setShowLogin(true); setMobileMenuOpen(false); }}>Sign In</button>
@@ -612,10 +553,9 @@ export default function Home() {
 
       {/* Section Content */}
       <div className="max-w-6xl mx-auto px-2 sm:px-4 mb-10">
-                {activeTab === 'Home' && (
-          <>
-            {/* Professional Humanizer Tool - Now at the top */}
-            <div id="humanizer-tool" className="max-w-5xl mx-auto mb-16 px-2 sm:px-4">
+        <>
+          {/* Professional Humanizer Tool - Now at the top */}
+          <div id="humanizer-tool" className="max-w-5xl mx-auto mb-16 px-2 sm:px-4">
               <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 p-4 sm:p-6 lg:p-8 relative">
                 {/* Header Section */}
                 <div className="mb-6 sm:mb-8">
@@ -839,153 +779,9 @@ export default function Home() {
               </div>
             </div>
           </>
-        )}
 
-
-
-        {activeTab === 'Features' && (
-          <section className="mb-8 bg-white/80 backdrop-blur-sm rounded-3xl border border-gray-200/50 p-10 shadow-xl">
-            <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Advanced Features</h2>
-            <div className="grid md:grid-cols-3 gap-8">
-              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                  </svg>
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Instant Humanization</h3>
-                <p className="text-gray-600">Transform AI text into natural human writing with just one click.</p>
-              </div>
-              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-200">
-                <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2m-9 0h10m-10 0a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V6a2 2 0 00-2-2"></path>
-                  </svg>
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Multiple Tones</h3>
-                <p className="text-gray-600">Choose from Normal, Formal, and Academic writing styles.</p>
-              </div>
-              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200">
-                <div className="w-16 h-16 bg-gradient-to-br from-green-600 to-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                  </svg>
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">AI Detection Bypass</h3>
-                <p className="text-gray-600">Advanced algorithms ensure your text passes AI detection tools.</p>
-              </div>
-            </div>
-          </section>
-        )}
-        {activeTab === 'Pricing' && (
-          <section className="mb-8 bg-white/80 backdrop-blur-sm rounded-3xl border border-gray-200/50 p-10 shadow-xl">
-            <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Simple Pricing</h2>
-            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              <div className="border border-blue-200 rounded-2xl p-8 flex flex-col items-center bg-gradient-to-br from-blue-50 to-indigo-50 relative">
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white px-4 py-1 rounded-full text-sm font-medium">Most Popular</div>
-                <h3 className="text-2xl font-bold text-blue-700 mb-2">Free</h3>
-                <p className="text-gray-700 mb-6 text-center">Perfect for getting started with text humanization.</p>
-                <ul className="text-gray-600 text-sm mb-8 list-none space-y-3">
-                  <li className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    Unlimited rewrites
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    Normal tone only
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    Community support
-                  </li>
-                </ul>
-                <span className="text-3xl font-bold text-blue-700 mb-4">$0</span>
-                <button className="w-full px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg">Get Started Free</button>
-              </div>
-              <div className="border border-purple-200 rounded-2xl p-8 flex flex-col items-center bg-gradient-to-br from-purple-50 to-pink-50 relative">
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-purple-600 text-white px-4 py-1 rounded-full text-sm font-medium">Pro</div>
-                <h3 className="text-2xl font-bold text-purple-700 mb-2">Pro</h3>
-                <p className="text-gray-700 mb-6 text-center">Advanced features for power users and professionals.</p>
-                <ul className="text-gray-600 text-sm mb-8 list-none space-y-3">
-                  <li className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    All tone options
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    Priority support
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    Early access to new features
-                  </li>
-                </ul>
-                <span className="text-3xl font-bold text-purple-700 mb-4">$9<span className="text-base font-normal">/mo</span></span>
-                <button className="w-full px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold hover:from-purple-700 hover:to-pink-700 transition-all shadow-lg">Upgrade to Pro</button>
-              </div>
-            </div>
-          </section>
-        )}
-        {activeTab === 'Contact' && (
-          <section className="py-16 sm:py-20">
-            <div className="max-w-6xl mx-auto px-2 sm:px-4">
-              <div className="text-center mb-12">
-                <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-                  <span className="bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent">
-                    Contact Us
-                  </span>
-                </h2>
-                <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-                  Have questions or need support? We're here to help you get the most out of our AI text humanizer.
-                </p>
-              </div>
-
-              <div className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-3xl p-6 sm:p-8">
-                <form className="space-y-6">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <input 
-                      type="text" 
-                      placeholder="Your Name" 
-                      className="w-full px-4 py-3 rounded-xl border-2 border-white/20 bg-white/10 text-white placeholder-white/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 transition-all"
-                    />
-                    <input 
-                      type="email" 
-                      placeholder="Your Email" 
-                      className="w-full px-4 py-3 rounded-xl border-2 border-white/20 bg-white/10 text-white placeholder-white/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 transition-all"
-                    />
-                  </div>
-                  <textarea 
-                    rows={6} 
-                    placeholder="Your Message" 
-                    className="w-full px-4 py-3 rounded-xl border-2 border-white/20 bg-white/10 text-white placeholder-white/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 transition-all resize-none"
-                  ></textarea>
-                  <button className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl">
-                    Send Message
-                  </button>
-                </form>
-                <div className="mt-6 sm:mt-8 text-center text-gray-500 text-sm sm:text-base">
-                  Or email us directly at <a href="mailto:info@humanotext.com" className="text-blue-600 hover:underline font-medium">info@humanotext.com</a>
-                </div>
-              </div>
-            </div>
-          </section>
-        )}
-        
-        {/* FAQ Section - Only show on Home tab */}
-        {activeTab === 'Home' && (
-          <section className="mb-8 bg-white/80 backdrop-blur-sm rounded-3xl border border-gray-200/50 p-4 sm:p-6 lg:p-10 shadow-xl">
+        {/* FAQ Section */}
+        <section className="mb-8 bg-white/80 backdrop-blur-sm rounded-3xl border border-gray-200/50 p-4 sm:p-6 lg:p-10 shadow-xl">
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8 text-center">Frequently Asked Questions</h2>
           <div className="max-w-4xl mx-auto space-y-6">
             
@@ -1137,13 +933,13 @@ export default function Home() {
               <h3 className="text-xl font-bold text-gray-800 mb-4">Benefits of Using HumanoText</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                                     <h4 className="font-semibold text-gray-800">For Students</h4>
-                   <ul className="list-disc list-inside text-gray-700 text-sm space-y-1">
-                     <li>Make AI content more natural and readable</li>
-                     <li>Adapt content to different writing styles</li>
-                     <li>Ensure content sounds more human-written</li>
-                     <li>Save time on content refinement</li>
-                   </ul>
+                  <h4 className="font-semibold text-gray-800">For Students</h4>
+                  <ul className="list-disc list-inside text-gray-700 text-sm space-y-1">
+                    <li>Make AI content more natural and readable</li>
+                    <li>Adapt content to different writing styles</li>
+                    <li>Ensure content sounds more human-written</li>
+                    <li>Save time on content refinement</li>
+                  </ul>
                 </div>
                 <div className="space-y-2">
                   <h4 className="font-semibold text-gray-800">For Content Creators</h4>
@@ -1194,7 +990,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-        )}
 
         {/* Admin Panel Section - Only visible to admins */}
         {isAdmin && (
@@ -1317,142 +1112,6 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* AI Detection Section */}
-        {activeTab === 'AI Detection' && (
-          <section className="py-16 sm:py-20">
-            <div className="max-w-6xl mx-auto px-2 sm:px-4">
-              <div className="text-center mb-12">
-                <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-                  <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
-                    AI Detection Tool
-                  </span>
-                </h2>
-                <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-                  Detect if your text was generated by AI or written by a human. Our advanced detection system analyzes patterns and characteristics to provide accurate results.
-                </p>
-              </div>
-
-              <div className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-3xl p-6 sm:p-8">
-                {/* Input Section */}
-                <div className="mb-8">
-                  <h3 className="text-xl font-semibold text-white mb-4">Enter Text to Analyze</h3>
-                  <textarea
-                    value={detectionText}
-                    onChange={(e) => setDetectionText(e.target.value)}
-                    placeholder="Paste your text here (minimum 80 words, maximum 1000 words)..."
-                    className="w-full h-48 px-4 py-3 rounded-xl border-2 border-white/20 bg-white/10 text-white placeholder-white/50 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20 transition-all resize-none"
-                  />
-                  <div className="mt-2 flex justify-between items-center">
-                    <span className="text-sm text-gray-400">
-                      {detectionText.trim().split(/\s+/).length} words
-                    </span>
-                    <button
-                      onClick={handleAIDetection}
-                      disabled={detectionLoading || detectionText.trim().split(/\s+/).length < 80}
-                      className="px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-semibold rounded-xl hover:from-yellow-600 hover:to-orange-600 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {detectionLoading ? (
-                        <div className="flex items-center gap-2">
-                          <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                          Analyzing...
-                        </div>
-                      ) : (
-                        'Detect AI'
-                      )}
-                    </button>
-                  </div>
-                  {detectionError && (
-                    <div className="mt-3 p-3 bg-red-500/20 border border-red-500/30 rounded-lg">
-                      <p className="text-red-300 text-sm">{detectionError}</p>
-                    </div>
-                  )}
-                </div>
-
-                {/* Results Section */}
-                {detectionResult && (
-                  <div className="space-y-6">
-                    <h3 className="text-xl font-semibold text-white mb-4">Detection Results</h3>
-                    
-                    {/* Main Result Card */}
-                    <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6">
-                      <div className="flex items-center justify-between mb-4">
-                        <h4 className="text-lg font-semibold text-white">Analysis Result</h4>
-                        <div className={`px-3 py-1 rounded-full text-sm font-medium ${
-                          detectionResult.is_ai_generated === true 
-                            ? 'bg-red-500/20 text-red-300 border border-red-500/30'
-                            : detectionResult.is_ai_generated === false
-                            ? 'bg-green-500/20 text-green-300 border border-green-500/30'
-                            : 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30'
-                        }`}>
-                          {detectionResult.is_ai_generated === true ? 'AI Generated' :
-                           detectionResult.is_ai_generated === false ? 'Human Written' : 'Uncertain'}
-                        </div>
-                      </div>
-                      
-                      {/* Confidence Bar */}
-                      <div className="mb-4">
-                        <div className="flex justify-between items-center mb-2">
-                          <span className="text-sm text-gray-300">Confidence</span>
-                          <span className="text-sm font-medium text-white">{Math.round(detectionResult.confidence * 100)}%</span>
-                        </div>
-                        <div className="w-full bg-gray-700 rounded-full h-3">
-                          <div 
-                            className={`h-3 rounded-full transition-all duration-500 ${
-                              detectionResult.is_ai_generated === true 
-                                ? 'bg-gradient-to-r from-red-500 to-red-600'
-                                : detectionResult.is_ai_generated === false
-                                ? 'bg-gradient-to-r from-green-500 to-green-600'
-                                : 'bg-gradient-to-r from-yellow-500 to-yellow-600'
-                            }`}
-                            style={{ width: `${detectionResult.confidence * 100}%` }}
-                          ></div>
-                        </div>
-                      </div>
-
-                      {/* Percentage */}
-                      <div className="mb-4">
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm text-gray-300">AI Probability</span>
-                          <span className="text-lg font-bold text-white">{detectionResult.percentage}%</span>
-                        </div>
-                      </div>
-
-                      {/* Word Count & Source */}
-                      <div className="grid grid-cols-2 gap-4 text-sm">
-                        <div>
-                          <span className="text-gray-400">Words:</span>
-                          <span className="text-white ml-2">{detectionResult.word_count}</span>
-                        </div>
-                        <div>
-                          <span className="text-gray-400">Source:</span>
-                          <span className="text-white ml-2 capitalize">{detectionResult.source}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Indicators */}
-                    {detectionResult.indicators && detectionResult.indicators.length > 0 && (
-                      <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6">
-                        <h4 className="text-lg font-semibold text-white mb-4">Detection Indicators</h4>
-                        <div className="space-y-3">
-                          {detectionResult.indicators.map((indicator, index) => (
-                            <div key={index} className="flex items-center gap-3 p-3 bg-white/5 rounded-lg">
-                              <div className={`w-2 h-2 rounded-full ${
-                                indicator.toLowerCase().includes('ai') ? 'bg-red-400' : 'bg-green-400'
-                              }`}></div>
-                              <span className="text-sm text-gray-300">{indicator}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
               </div>
             </div>
           </section>

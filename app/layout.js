@@ -1,4 +1,4 @@
-// app/layout.tsx
+// app/layout.js
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Analytics } from '@vercel/analytics/react';
@@ -21,8 +21,6 @@ export const metadata = {
   },
 };
 
-// ./app/layout.js
-
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
@@ -40,7 +38,7 @@ export default function RootLayout({ children }) {
           }}
         />
       </head>
-      <body>
+      <body className={`${geistSans.variable} ${geistMono.variable} font-sans`}>
         {children}
         <Analytics />
       </body>

@@ -1,0 +1,10 @@
+[33m243a47b[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m Create separate pages for AI Detection, Features, Pricing, and Contact with proper navigation
+[33m85fa81a[m Update FAQ section: Add comprehensive information about all platform features including modes, AI detection, word limits, and updated privacy policy
+[33mfc8e7bd[m Reorder navigation: Move AI Detection tab after Home tab
+[33mcd286d8[m Fix FAQ Section: Make FAQ section only visible on Home tab, not on all tabs
+[33m90e28a6[m Fix AI Detection Position: Move AI Detection section to top of page content, right after Home section
+[33m76cbd66[m Reorder Navigation: Move AI Detection tab to first position in both desktop and mobile navigation
+[33mbef6ebf[m Add AI Detection Tool: New /detect-ai endpoint integration with comprehensive UI, word limits (80-1000), confidence indicators, and detailed results display
+[33mf151e2f[m Fix Admin Panel: Add debugging logs and fix linter errors, ensure Authorization headers are properly set
+[33ma3b630b[m Fix Admin Panel: Add debugging logs and fix linter errors, ensure Authorization headers are properly set
+[33mbcfde71[m Add Admin Panel section to main page: Embedded admin dashboard with quick actions and system status
