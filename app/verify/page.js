@@ -23,7 +23,7 @@ function VerifyPageContent() {
   
   const verifyEmail = async (token) => {
     try {
-      const response = await fetch("https://yzbs5m62yw9odw-8000.proxy.runpod.net/auth/verify", {
+      const response = await fetch("https://g2ixr6izoi1zdq-8000.proxy.runpod.net/auth/verify", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
