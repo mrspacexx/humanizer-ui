@@ -39,6 +39,12 @@ export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
+  
+  // AI Detection States
+  const [detectionText, setDetectionText] = useState('');
+  const [detectionResult, setDetectionResult] = useState(null);
+  const [detectionLoading, setDetectionLoading] = useState(false);
+  const [detectionError, setDetectionError] = useState('');
 
   // Check if user is already logged in on page load
   useEffect(() => {
@@ -244,6 +250,48 @@ export default function Home() {
     navigator.clipboard.writeText(result);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  // AI Detection Handler
+  const handleAIDetection = async () => {
+    const wordCount = detectionText.trim().split(/\s+/).length;
+    
+    if (wordCount < 80) {
+      setDetectionError("Minimum 80 words required for AI detection.");
+      return;
+    }
+    
+    if (wordCount > 1000) {
+      setDetectionError("Maximum 1000 words allowed for AI detection.");
+      return;
+    }
+    
+    setDetectionError('');
+    setDetectionLoading(true);
+    setDetectionResult(null);
+    
+    try {
+      const response = await fetch("https://g2ixr6izoi1zdq-8000.proxy.runpod.net/detect-ai", {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem('token')}` 
+        },
+        body: JSON.stringify({ text: detectionText }),
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        setDetectionResult(data);
+      } else {
+        setDetectionError(data.detail || "AI detection failed. Please try again.");
+      }
+    } catch (error) {
+      setDetectionError("Connection error. Please try again.");
+    } finally {
+      setDetectionLoading(false);
+    }
   };
 
   return (
@@ -487,6 +535,13 @@ export default function Home() {
             )}
             <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-orange-400 to-red-500 rounded-full transition-all duration-300 group-hover:w-full"></div>
           </button>
+          <button onClick={() => setActiveTab('AI Detection')} className={`text-white/80 font-semibold hover:text-white transition-all duration-300 relative group ${activeTab === 'AI Detection' ? 'text-white' : ''}`}>
+            <span className="relative z-10">AI Detection</span>
+            {activeTab === 'AI Detection' && (
+              <div className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full shadow-lg shadow-yellow-400/50"></div>
+            )}
+            <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full transition-all duration-300 group-hover:w-full"></div>
+          </button>
         </div>
         {/* Desktop Auth Buttons */}
         <div className="hidden md:flex items-center gap-4 relative z-10">
@@ -531,6 +586,7 @@ export default function Home() {
             <button onClick={() => { setActiveTab('Features'); setMobileMenuOpen(false); }} className={`text-gray-800 font-medium hover:text-blue-600 transition-colors w-full text-left py-3 ${activeTab === 'Features' ? 'text-blue-600 font-semibold' : ''}`}>Features</button>
             <button onClick={() => { setActiveTab('Pricing'); setMobileMenuOpen(false); }} className={`text-gray-800 font-medium hover:text-blue-600 transition-colors w-full text-left py-3 ${activeTab === 'Pricing' ? 'text-blue-600 font-semibold' : ''}`}>Pricing</button>
             <button onClick={() => { setActiveTab('Contact'); setMobileMenuOpen(false); }} className={`text-gray-800 font-medium hover:text-blue-600 transition-colors w-full text-left py-3 ${activeTab === 'Contact' ? 'text-blue-600 font-semibold' : ''}`}>Contact</button>
+            <button onClick={() => { setActiveTab('AI Detection'); setMobileMenuOpen(false); }} className={`text-gray-800 font-medium hover:text-blue-600 transition-colors w-full text-left py-3 ${activeTab === 'AI Detection' ? 'text-blue-600 font-semibold' : ''}`}>AI Detection</button>
             {!isLoggedIn ? (
               <div className="flex gap-3 w-full mt-4 pt-4 border-t border-gray-200">
                 <button className="flex-1 px-4 py-3 rounded-xl border-2 border-blue-600 text-blue-600 font-semibold bg-white hover:bg-blue-50 transition-all" onClick={() => { setShowLogin(true); setMobileMenuOpen(false); }}>Sign In</button>
@@ -880,36 +936,45 @@ export default function Home() {
           </section>
         )}
         {activeTab === 'Contact' && (
-          <section className="mb-8 bg-white/80 backdrop-blur-sm rounded-3xl border border-gray-200/50 p-4 sm:p-6 lg:p-10 shadow-xl">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 sm:mb-8 text-center">Get in Touch</h2>
-            <div className="max-w-2xl mx-auto">
-              <form className="space-y-4 sm:space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                  <input 
-                    type="text" 
-                    placeholder="Your Name" 
-                    className="border border-gray-300 rounded-xl px-3 sm:px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all bg-white text-gray-800 placeholder-gray-500 text-sm sm:text-base" 
-                  />
-                  <input 
-                    type="email" 
-                    placeholder="Your Email" 
-                    className="border border-gray-300 rounded-xl px-3 sm:px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all bg-white text-gray-800 placeholder-gray-500 text-sm sm:text-base" 
-                  />
+          <section className="py-16 sm:py-20">
+            <div className="max-w-6xl mx-auto px-2 sm:px-4">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+                  <span className="bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent">
+                    Contact Us
+                  </span>
+                </h2>
+                <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+                  Have questions or need support? We're here to help you get the most out of our AI text humanizer.
+                </p>
+              </div>
+
+              <div className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-3xl p-6 sm:p-8">
+                <form className="space-y-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <input 
+                      type="text" 
+                      placeholder="Your Name" 
+                      className="w-full px-4 py-3 rounded-xl border-2 border-white/20 bg-white/10 text-white placeholder-white/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 transition-all"
+                    />
+                    <input 
+                      type="email" 
+                      placeholder="Your Email" 
+                      className="w-full px-4 py-3 rounded-xl border-2 border-white/20 bg-white/10 text-white placeholder-white/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 transition-all"
+                    />
+                  </div>
+                  <textarea 
+                    rows={6} 
+                    placeholder="Your Message" 
+                    className="w-full px-4 py-3 rounded-xl border-2 border-white/20 bg-white/10 text-white placeholder-white/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 transition-all resize-none"
+                  ></textarea>
+                  <button className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl">
+                    Send Message
+                  </button>
+                </form>
+                <div className="mt-6 sm:mt-8 text-center text-gray-500 text-sm sm:text-base">
+                  Or email us directly at <a href="mailto:info@humanotext.com" className="text-blue-600 hover:underline font-medium">info@humanotext.com</a>
                 </div>
-                <textarea 
-                  placeholder="Your Message" 
-                  rows={6} 
-                  className="border border-gray-300 rounded-xl px-3 sm:px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all bg-white text-gray-800 placeholder-gray-500 text-sm sm:text-base w-full resize-none" 
-                ></textarea>
-                <button 
-                  type="submit" 
-                  className="w-full px-4 sm:px-6 py-3 sm:py-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg text-base sm:text-lg"
-                >
-                  Send Message
-                </button>
-              </form>
-              <div className="mt-6 sm:mt-8 text-center text-gray-500 text-sm sm:text-base">
-                Or email us directly at <a href="mailto:info@humanotext.com" className="text-blue-600 hover:underline font-medium">info@humanotext.com</a>
               </div>
             </div>
           </section>
@@ -1187,49 +1252,141 @@ export default function Home() {
           </section>
         )}
 
-        {/* Contact Section */}
-        <section className="py-16 sm:py-20">
-          <div className="max-w-6xl mx-auto px-2 sm:px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-                <span className="bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent">
-                  Contact Us
-                </span>
-              </h2>
-              <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-                Have questions or need support? We're here to help you get the most out of our AI text humanizer.
-              </p>
-            </div>
+        {/* AI Detection Section */}
+        {activeTab === 'AI Detection' && (
+          <section className="py-16 sm:py-20">
+            <div className="max-w-6xl mx-auto px-2 sm:px-4">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+                  <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
+                    AI Detection Tool
+                  </span>
+                </h2>
+                <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+                  Detect if your text was generated by AI or written by a human. Our advanced detection system analyzes patterns and characteristics to provide accurate results.
+                </p>
+              </div>
 
-            <div className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-3xl p-6 sm:p-8">
-              <form className="space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <input 
-                    type="text" 
-                    placeholder="Your Name" 
-                    className="w-full px-4 py-3 rounded-xl border-2 border-white/20 bg-white/10 text-white placeholder-white/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 transition-all"
+              <div className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-3xl p-6 sm:p-8">
+                {/* Input Section */}
+                <div className="mb-8">
+                  <h3 className="text-xl font-semibold text-white mb-4">Enter Text to Analyze</h3>
+                  <textarea
+                    value={detectionText}
+                    onChange={(e) => setDetectionText(e.target.value)}
+                    placeholder="Paste your text here (minimum 80 words, maximum 1000 words)..."
+                    className="w-full h-48 px-4 py-3 rounded-xl border-2 border-white/20 bg-white/10 text-white placeholder-white/50 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20 transition-all resize-none"
                   />
-                  <input 
-                    type="email" 
-                    placeholder="Your Email" 
-                    className="w-full px-4 py-3 rounded-xl border-2 border-white/20 bg-white/10 text-white placeholder-white/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 transition-all"
-                  />
+                  <div className="mt-2 flex justify-between items-center">
+                    <span className="text-sm text-gray-400">
+                      {detectionText.trim().split(/\s+/).length} words
+                    </span>
+                    <button
+                      onClick={handleAIDetection}
+                      disabled={detectionLoading || detectionText.trim().split(/\s+/).length < 80}
+                      className="px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-semibold rounded-xl hover:from-yellow-600 hover:to-orange-600 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {detectionLoading ? (
+                        <div className="flex items-center gap-2">
+                          <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                          Analyzing...
+                        </div>
+                      ) : (
+                        'Detect AI'
+                      )}
+                    </button>
+                  </div>
+                  {detectionError && (
+                    <div className="mt-3 p-3 bg-red-500/20 border border-red-500/30 rounded-lg">
+                      <p className="text-red-300 text-sm">{detectionError}</p>
+                    </div>
+                  )}
                 </div>
-                <textarea 
-                  rows={6} 
-                  placeholder="Your Message" 
-                  className="w-full px-4 py-3 rounded-xl border-2 border-white/20 bg-white/10 text-white placeholder-white/50 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 transition-all resize-none"
-                ></textarea>
-                <button className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl">
-                  Send Message
-                </button>
-              </form>
-              <div className="mt-6 sm:mt-8 text-center text-gray-500 text-sm sm:text-base">
-                Or email us directly at <a href="mailto:info@humanotext.com" className="text-blue-600 hover:underline font-medium">info@humanotext.com</a>
+
+                {/* Results Section */}
+                {detectionResult && (
+                  <div className="space-y-6">
+                    <h3 className="text-xl font-semibold text-white mb-4">Detection Results</h3>
+                    
+                    {/* Main Result Card */}
+                    <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <h4 className="text-lg font-semibold text-white">Analysis Result</h4>
+                        <div className={`px-3 py-1 rounded-full text-sm font-medium ${
+                          detectionResult.is_ai_generated === true 
+                            ? 'bg-red-500/20 text-red-300 border border-red-500/30'
+                            : detectionResult.is_ai_generated === false
+                            ? 'bg-green-500/20 text-green-300 border border-green-500/30'
+                            : 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30'
+                        }`}>
+                          {detectionResult.is_ai_generated === true ? 'AI Generated' :
+                           detectionResult.is_ai_generated === false ? 'Human Written' : 'Uncertain'}
+                        </div>
+                      </div>
+                      
+                      {/* Confidence Bar */}
+                      <div className="mb-4">
+                        <div className="flex justify-between items-center mb-2">
+                          <span className="text-sm text-gray-300">Confidence</span>
+                          <span className="text-sm font-medium text-white">{Math.round(detectionResult.confidence * 100)}%</span>
+                        </div>
+                        <div className="w-full bg-gray-700 rounded-full h-3">
+                          <div 
+                            className={`h-3 rounded-full transition-all duration-500 ${
+                              detectionResult.is_ai_generated === true 
+                                ? 'bg-gradient-to-r from-red-500 to-red-600'
+                                : detectionResult.is_ai_generated === false
+                                ? 'bg-gradient-to-r from-green-500 to-green-600'
+                                : 'bg-gradient-to-r from-yellow-500 to-yellow-600'
+                            }`}
+                            style={{ width: `${detectionResult.confidence * 100}%` }}
+                          ></div>
+                        </div>
+                      </div>
+
+                      {/* Percentage */}
+                      <div className="mb-4">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-gray-300">AI Probability</span>
+                          <span className="text-lg font-bold text-white">{detectionResult.percentage}%</span>
+                        </div>
+                      </div>
+
+                      {/* Word Count & Source */}
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <span className="text-gray-400">Words:</span>
+                          <span className="text-white ml-2">{detectionResult.word_count}</span>
+                        </div>
+                        <div>
+                          <span className="text-gray-400">Source:</span>
+                          <span className="text-white ml-2 capitalize">{detectionResult.source}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Indicators */}
+                    {detectionResult.indicators && detectionResult.indicators.length > 0 && (
+                      <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6">
+                        <h4 className="text-lg font-semibold text-white mb-4">Detection Indicators</h4>
+                        <div className="space-y-3">
+                          {detectionResult.indicators.map((indicator, index) => (
+                            <div key={index} className="flex items-center gap-3 p-3 bg-white/5 rounded-lg">
+                              <div className={`w-2 h-2 rounded-full ${
+                                indicator.toLowerCase().includes('ai') ? 'bg-red-400' : 'bg-green-400'
+                              }`}></div>
+                              <span className="text-sm text-gray-300">{indicator}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
       </div>
     </div>
   );
