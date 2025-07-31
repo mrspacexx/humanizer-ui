@@ -82,7 +82,7 @@ export default function Pricing() {
       <div className="max-w-6xl mx-auto px-2 sm:px-4 mb-10">
         <section className="mb-8 bg-white/80 backdrop-blur-sm rounded-3xl border border-gray-200/50 p-10 shadow-xl">
           <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Simple Pricing</h2>
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             <div className="border border-blue-200 rounded-2xl p-8 flex flex-col items-center bg-gradient-to-br from-blue-50 to-indigo-50 relative">
               <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white px-4 py-1 rounded-full text-sm font-medium">Most Popular</div>
               <h3 className="text-2xl font-bold text-blue-700 mb-2">Free</h3>
@@ -119,6 +119,24 @@ export default function Pricing() {
                   <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
                   </svg>
+                  40,000 words humanize
+                </li>
+                <li className="flex items-center gap-2">
+                  <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  Unlimited rewrites
+                </li>
+                <li className="flex items-center gap-2">
+                  <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  20,000 words power
+                </li>
+                <li className="flex items-center gap-2">
+                  <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
                   All tone options
                 </li>
                 <li className="flex items-center gap-2">
@@ -127,15 +145,48 @@ export default function Pricing() {
                   </svg>
                   Priority support
                 </li>
+              </ul>
+              <span className="text-3xl font-bold text-purple-700 mb-4">$9<span className="text-base font-normal">/mo</span></span>
+              <button className="w-full px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold hover:from-purple-700 hover:to-pink-700 transition-all shadow-lg">Upgrade to Pro</button>
+            </div>
+            <div className="border border-emerald-200 rounded-2xl p-8 flex flex-col items-center bg-gradient-to-br from-emerald-50 to-green-50 relative">
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-emerald-600 text-white px-4 py-1 rounded-full text-sm font-medium">Professional</div>
+              <h3 className="text-2xl font-bold text-emerald-700 mb-2">Professional</h3>
+              <p className="text-gray-700 mb-6 text-center">Ultimate plan for heavy users and businesses.</p>
+              <ul className="text-gray-600 text-sm mb-8 list-none space-y-3">
                 <li className="flex items-center gap-2">
                   <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
                   </svg>
-                  Early access to new features
+                  Unlimited humanize
+                </li>
+                <li className="flex items-center gap-2">
+                  <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  100,000 words power
+                </li>
+                <li className="flex items-center gap-2">
+                  <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  Unlimited rewrites
+                </li>
+                <li className="flex items-center gap-2">
+                  <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  All tone options
+                </li>
+                <li className="flex items-center gap-2">
+                  <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  Premium support
                 </li>
               </ul>
-              <span className="text-3xl font-bold text-purple-700 mb-4">$9<span className="text-base font-normal">/mo</span></span>
-              <button className="w-full px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold hover:from-purple-700 hover:to-pink-700 transition-all shadow-lg">Upgrade to Pro</button>
+              <span className="text-3xl font-bold text-emerald-700 mb-4">$30<span className="text-base font-normal">/mo</span></span>
+              <button className="w-full px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-green-600 text-white font-semibold hover:from-emerald-700 hover:to-green-700 transition-all shadow-lg">Upgrade to Professional</button>
             </div>
           </div>
         </section>
