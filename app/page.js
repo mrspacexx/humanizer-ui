@@ -38,6 +38,8 @@ export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
+  const [userUsage, setUserUsage] = useState(0); // Kullanıcının gerçek usage'ı
+  const [userPlan, setUserPlan] = useState("free"); // Kullanıcının planı
   
 
 
@@ -46,9 +48,25 @@ export default function Home() {
     const token = localStorage.getItem('token');
     if (token) {
       setIsLoggedIn(true);
-      // You could also verify the token with the backend here
+      fetchUserUsage(token); // Kullanıcının usage'ını çek
     }
   }, []);
+
+  // Kullanıcının usage bilgisini backend'den çek
+  const fetchUserUsage = async (token) => {
+    try {
+      const response = await fetch("https://g2ixr6izoi1zdq-8000.proxy.runpod.net/auth/me", {
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+      if (response.ok) {
+        const userData = await response.json();
+        setUserUsage(userData.monthly_usage || 0);
+        setUserPlan(userData.plan || "free");
+      }
+    } catch (error) {
+      console.error("Error fetching user usage:", error);
+    }
+  };
 
   // Login handler
   const handleLogin = async (e) => {
@@ -83,6 +101,9 @@ export default function Home() {
       if (data.is_admin) {
         setIsAdmin(true);
       }
+      
+      // Kullanıcının usage bilgisini çek
+      await fetchUserUsage(data.access_token);
       
       if (justSignedUp) {
         setLoginSuccess(true);
@@ -172,6 +193,8 @@ export default function Home() {
     setIsLoggedIn(false);
     setUserEmail("");
     setIsAdmin(false);
+    setUserUsage(0);
+    setUserPlan("free");
   };
 
   const handleSubmit = async () => {
@@ -193,6 +216,14 @@ export default function Home() {
       monthlyLimit = isLoggedIn ? 10000 : 500; // Normal Mode: 10k/500
     }
     
+    // Giriş yapan kullanıcılar için backend'den gelen usage kontrolü
+    if (isLoggedIn && (userUsage + wordCount) > monthlyLimit) {
+      setWordLimitError(true);
+      setResult("");
+      return;
+    }
+    
+    // Anonim kullanıcılar için local usage kontrolü
     if (!isLoggedIn && (totalWordsUsed + wordCount) > monthlyLimit) {
       setWordLimitError(true);
       setResult("");
@@ -227,11 +258,22 @@ export default function Home() {
       });
 
       const data = await response.json();
+      
+      // 429 Too Many Requests hatası kontrolü
+      if (response.status === 429) {
+        setWordLimitError(true);
+        setResult("⚠️ You've reached your monthly word limit. Please upgrade your plan for unlimited access.");
+        return;
+      }
+      
       setResult(data.result);
       
       // Giriş yapmayan kullanıcılar için toplam kelime sayısını güncelle
       if (!isLoggedIn) {
         setTotalWordsUsed(prev => prev + wordCount);
+      } else {
+        // Giriş yapan kullanıcılar için usage'ı güncelle
+        setUserUsage(prev => prev + wordCount);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -595,19 +637,19 @@ export default function Home() {
                       <span className="text-orange-600 font-medium"> (Paraphrase: {totalWordsUsed}/1,000)</span>
                     )}
                     {activeMode === "paraphrase" && isLoggedIn && (
-                      <span className="text-green-600 font-medium"> (Paraphrase: {totalWordsUsed}/10,000)</span>
+                      <span className="text-green-600 font-medium"> (Paraphrase: {userUsage}/10,000)</span>
                     )}
                     {activeMode === "power" && !isLoggedIn && (
                       <span className="text-orange-600 font-medium"> (Power Mode: {totalWordsUsed}/200)</span>
                     )}
                     {activeMode === "power" && isLoggedIn && (
-                      <span className="text-green-600 font-medium"> (Power Mode: {totalWordsUsed}/2,000)</span>
+                      <span className="text-green-600 font-medium"> (Power Mode: {userUsage}/2,000)</span>
                     )}
                     {activeMode === "humanize" && !isLoggedIn && (
                       <span className="text-blue-600 font-medium"> (Humanize: {totalWordsUsed}/500)</span>
                     )}
                     {activeMode === "humanize" && isLoggedIn && (
-                      <span className="text-green-600 font-medium"> (Humanize: {totalWordsUsed}/10,000)</span>
+                      <span className="text-green-600 font-medium"> (Humanize: {userUsage}/10,000)</span>
                     )}
                   </span>
                 </div>
