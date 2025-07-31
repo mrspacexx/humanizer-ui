@@ -507,6 +507,13 @@ export default function Home() {
         </div>
         {/* Desktop Nav Links */}
         <div className="hidden md:flex items-center gap-10 relative z-10">
+          <button onClick={() => setActiveTab('AI Detection')} className={`text-white/80 font-semibold hover:text-white transition-all duration-300 relative group ${activeTab === 'AI Detection' ? 'text-white' : ''}`}>
+            <span className="relative z-10">AI Detection</span>
+            {activeTab === 'AI Detection' && (
+              <div className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full shadow-lg shadow-yellow-400/50"></div>
+            )}
+            <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full transition-all duration-300 group-hover:w-full"></div>
+          </button>
           <button onClick={() => setActiveTab('Home')} className={`text-white/80 font-semibold hover:text-white transition-all duration-300 relative group ${activeTab === 'Home' ? 'text-white' : ''}`}>
             <span className="relative z-10">Home</span>
             {activeTab === 'Home' && (
@@ -534,13 +541,6 @@ export default function Home() {
               <div className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-orange-400 to-red-500 rounded-full shadow-lg shadow-orange-400/50"></div>
             )}
             <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-orange-400 to-red-500 rounded-full transition-all duration-300 group-hover:w-full"></div>
-          </button>
-          <button onClick={() => setActiveTab('AI Detection')} className={`text-white/80 font-semibold hover:text-white transition-all duration-300 relative group ${activeTab === 'AI Detection' ? 'text-white' : ''}`}>
-            <span className="relative z-10">AI Detection</span>
-            {activeTab === 'AI Detection' && (
-              <div className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full shadow-lg shadow-yellow-400/50"></div>
-            )}
-            <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full transition-all duration-300 group-hover:w-full"></div>
           </button>
         </div>
         {/* Desktop Auth Buttons */}
@@ -582,11 +582,11 @@ export default function Home() {
         {/* Mobile Menu */}
         {mobileMenuOpen && (
           <div className="absolute top-full left-0 w-full bg-white/95 backdrop-blur-xl border-b border-white/30 shadow-2xl flex flex-col items-start px-4 sm:px-6 py-4 gap-3 md:hidden z-50">
+            <button onClick={() => { setActiveTab('AI Detection'); setMobileMenuOpen(false); }} className={`text-gray-800 font-medium hover:text-blue-600 transition-colors w-full text-left py-3 ${activeTab === 'AI Detection' ? 'text-blue-600 font-semibold' : ''}`}>AI Detection</button>
             <button onClick={() => { setActiveTab('Home'); setMobileMenuOpen(false); }} className={`text-gray-800 font-medium hover:text-blue-600 transition-colors w-full text-left py-3 ${activeTab === 'Home' ? 'text-blue-600 font-semibold' : ''}`}>Home</button>
             <button onClick={() => { setActiveTab('Features'); setMobileMenuOpen(false); }} className={`text-gray-800 font-medium hover:text-blue-600 transition-colors w-full text-left py-3 ${activeTab === 'Features' ? 'text-blue-600 font-semibold' : ''}`}>Features</button>
             <button onClick={() => { setActiveTab('Pricing'); setMobileMenuOpen(false); }} className={`text-gray-800 font-medium hover:text-blue-600 transition-colors w-full text-left py-3 ${activeTab === 'Pricing' ? 'text-blue-600 font-semibold' : ''}`}>Pricing</button>
             <button onClick={() => { setActiveTab('Contact'); setMobileMenuOpen(false); }} className={`text-gray-800 font-medium hover:text-blue-600 transition-colors w-full text-left py-3 ${activeTab === 'Contact' ? 'text-blue-600 font-semibold' : ''}`}>Contact</button>
-            <button onClick={() => { setActiveTab('AI Detection'); setMobileMenuOpen(false); }} className={`text-gray-800 font-medium hover:text-blue-600 transition-colors w-full text-left py-3 ${activeTab === 'AI Detection' ? 'text-blue-600 font-semibold' : ''}`}>AI Detection</button>
             {!isLoggedIn ? (
               <div className="flex gap-3 w-full mt-4 pt-4 border-t border-gray-200">
                 <button className="flex-1 px-4 py-3 rounded-xl border-2 border-blue-600 text-blue-600 font-semibold bg-white hover:bg-blue-50 transition-all" onClick={() => { setShowLogin(true); setMobileMenuOpen(false); }}>Sign In</button>
