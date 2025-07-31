@@ -20,8 +20,7 @@ export default function Home() {
   const [copied, setCopied] = useState(false);
   const [wordLimitError, setWordLimitError] = useState(false);
   const [totalWordsUsed, setTotalWordsUsed] = useState(0);
-  const [usePowerMode, setUsePowerMode] = useState(false);
-  const [useParaphrase, setUseParaphrase] = useState(false);
+  const [activeMode, setActiveMode] = useState("humanize"); // humanize, power, paraphrase
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("Home");
   // Login/Signup modal state
@@ -177,9 +176,9 @@ export default function Home() {
     
     // Aylık word limit kontrolü
     let monthlyLimit;
-    if (useParaphrase) {
+    if (activeMode === "paraphrase") {
       monthlyLimit = isLoggedIn ? 10000 : 1000; // Paraphrase: 10k/1k
-    } else if (usePowerMode) {
+    } else if (activeMode === "power") {
       monthlyLimit = isLoggedIn ? 2000 : 200; // Power Mode: 2k/200
     } else {
       monthlyLimit = isLoggedIn ? 10000 : 500; // Normal Mode: 10k/500
@@ -198,9 +197,9 @@ export default function Home() {
     try {
       // Endpoint seçimi
       let endpoint;
-      if (useParaphrase) {
+      if (activeMode === "paraphrase") {
         endpoint = 'https://g2ixr6izoi1zdq-8000.proxy.runpod.net/paraphrase';
-      } else if (usePowerMode) {
+      } else if (activeMode === "power") {
         endpoint = 'https://g2ixr6izoi1zdq-8000.proxy.runpod.net/humanize/power';
       } else {
         endpoint = 'https://g2ixr6izoi1zdq-8000.proxy.runpod.net/humanize';
@@ -559,9 +558,9 @@ export default function Home() {
                 {wordLimitError && (
                   <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
                     ⚠️ {inputText.trim().split(/\s+/).length > 200 ? "Maximum 200 words per request allowed." : 
-                      useParaphrase ? 
+                      activeMode === "paraphrase" ? 
                         `You've reached your ${isLoggedIn ? '10,000' : '1,000'} word limit for Paraphrase Mode. Sign up for unlimited access!` :
-                      usePowerMode ? 
+                      activeMode === "power" ? 
                         `You've reached your ${isLoggedIn ? '2,000' : '200'} word limit for Power Mode. Sign up for unlimited access!` :
                         `You've reached your ${isLoggedIn ? '10,000' : '500'} word limit for Normal Mode. Sign up for unlimited access!`
                     }
@@ -572,22 +571,22 @@ export default function Home() {
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-sm text-gray-600">
                     {inputText.trim().split(/\s+/).filter(word => word.length > 0).length} words / 200 per request
-                    {useParaphrase && !isLoggedIn && (
+                    {activeMode === "paraphrase" && !isLoggedIn && (
                       <span className="text-orange-600 font-medium"> (Paraphrase: {totalWordsUsed}/1,000)</span>
                     )}
-                    {useParaphrase && isLoggedIn && (
+                    {activeMode === "paraphrase" && isLoggedIn && (
                       <span className="text-green-600 font-medium"> (Paraphrase: {totalWordsUsed}/10,000)</span>
                     )}
-                    {usePowerMode && !isLoggedIn && (
+                    {activeMode === "power" && !isLoggedIn && (
                       <span className="text-orange-600 font-medium"> (Power Mode: {totalWordsUsed}/200)</span>
                     )}
-                    {usePowerMode && isLoggedIn && (
+                    {activeMode === "power" && isLoggedIn && (
                       <span className="text-green-600 font-medium"> (Power Mode: {totalWordsUsed}/2,000)</span>
                     )}
-                    {!useParaphrase && !usePowerMode && !isLoggedIn && (
+                    {activeMode === "humanize" && !isLoggedIn && (
                       <span className="text-blue-600 font-medium"> (Normal Mode: {totalWordsUsed}/500)</span>
                     )}
-                    {!useParaphrase && !usePowerMode && isLoggedIn && (
+                    {activeMode === "humanize" && isLoggedIn && (
                       <span className="text-green-600 font-medium"> (Normal Mode: {totalWordsUsed}/10,000)</span>
                     )}
                   </span>
@@ -610,33 +609,42 @@ export default function Home() {
                     </div>
                   </div>
                   
-                  {/* Mode Toggles */}
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                    {/* Power Mode Toggle */}
-                    <div className="flex items-center gap-3">
-                      <span className="text-sm font-medium text-gray-700">Power Mode:</span>
+                  {/* Mode Selection Tabs */}
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                    <span className="text-lg font-semibold text-gray-700">Mode:</span>
+                    <div className="flex flex-wrap gap-2">
                       <button 
-                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${usePowerMode ? 'bg-purple-100 text-purple-800 border-2 border-purple-200' : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-purple-300'}`} 
-                        onClick={() => {
-                          setUsePowerMode(!usePowerMode);
-                          if (!usePowerMode) setUseParaphrase(false); // Power mode açılırsa paraphrase kapat
-                        }}
+                        className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-medium transition-all ${activeMode === 'humanize' ? 'bg-blue-100 text-blue-800 border-2 border-blue-200' : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-blue-300'}`} 
+                        onClick={() => setActiveMode('humanize')}
                       >
-                        {usePowerMode ? '⚡ ON' : '⚡ OFF'}
+                        <div className="flex items-center gap-2">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                          </svg>
+                          Humanize
+                        </div>
                       </button>
-                    </div>
-                    
-                    {/* Paraphrase Mode Toggle */}
-                    <div className="flex items-center gap-3">
-                      <span className="text-sm font-medium text-gray-700">Paraphrase:</span>
                       <button 
-                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${useParaphrase ? 'bg-orange-100 text-orange-800 border-2 border-orange-200' : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-orange-300'}`} 
-                        onClick={() => {
-                          setUseParaphrase(!useParaphrase);
-                          if (!useParaphrase) setUsePowerMode(false); // Paraphrase açılırsa power mode kapat
-                        }}
+                        className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-medium transition-all ${activeMode === 'paraphrase' ? 'bg-orange-100 text-orange-800 border-2 border-orange-200' : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-orange-300'}`} 
+                        onClick={() => setActiveMode('paraphrase')}
                       >
-                        {useParaphrase ? '🔄 ON' : '🔄 OFF'}
+                        <div className="flex items-center gap-2">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                          </svg>
+                          Paraphrase
+                        </div>
+                      </button>
+                      <button 
+                        className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-medium transition-all ${activeMode === 'power' ? 'bg-purple-100 text-purple-800 border-2 border-purple-200' : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-purple-300'}`} 
+                        onClick={() => setActiveMode('power')}
+                      >
+                        <div className="flex items-center gap-2">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                          </svg>
+                          Power
+                        </div>
                       </button>
                     </div>
                   </div>
@@ -651,7 +659,7 @@ export default function Home() {
                         <div className="flex items-center gap-2 sm:gap-3">
                           <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                           <span className="text-sm sm:text-base">
-                            {useParaphrase ? 'Paraphrasing...' : 'Humanizing...'}
+                            {activeMode === "paraphrase" ? 'Paraphrasing...' : 'Humanizing...'}
                           </span>
                         </div>
                       ) : (
@@ -660,7 +668,7 @@ export default function Home() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                           </svg>
                           <span className="text-sm sm:text-base">
-                            {useParaphrase ? 'Paraphrase' : 'Humanize'}
+                            {activeMode === "paraphrase" ? 'Paraphrase' : 'Humanize'}
                           </span>
                         </div>
                       )}
@@ -673,7 +681,7 @@ export default function Home() {
                   <div className="mt-6 sm:mt-8 p-4 sm:p-6 lg:p-8 bg-gray-50 rounded-2xl border border-gray-200">
                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4 sm:mb-6">
                       <h4 className="text-lg sm:text-xl font-bold text-gray-800">
-                        {useParaphrase ? 'Paraphrased Output' : 'Humanized Output'}
+                        {activeMode === "paraphrase" ? 'Paraphrased Output' : 'Humanized Output'}
                       </h4>
                       <Button
                         onClick={handleCopy}
