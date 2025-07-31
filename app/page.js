@@ -932,6 +932,13 @@ export default function Home() {
                 <li><strong>Review and copy</strong> the processed output to your clipboard</li>
                 <li><strong>Use the refined text</strong> in your content, assignments, or communications</li>
               </ol>
+              <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <h4 className="font-semibold text-blue-800 mb-2">Word Limits</h4>
+                <p className="text-blue-700 text-sm">
+                  <strong>Per request:</strong> Maximum 200 words for optimal processing quality.<br/>
+                  <strong>Monthly limits:</strong> Vary by plan - Free users have limited monthly usage, while Pro and Professional plans offer higher limits.
+                </p>
+              </div>
             </div>
 
             {/* AI Detection Tool */}
@@ -955,33 +962,49 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Word Limits and Usage */}
+            {/* Pricing Plans */}
             <div className="bg-white/50 rounded-2xl p-6 border border-gray-200">
-              <h3 className="text-xl font-bold text-gray-800 mb-4">Word Limits and Usage</h3>
+              <h3 className="text-xl font-bold text-gray-800 mb-4">Pricing Plans and Features</h3>
               <p className="text-gray-700 leading-relaxed mb-4">
-                Our platform has different usage limits based on your account status and selected mode:
+                We offer three different plans to meet your needs:
               </p>
               <div className="space-y-4">
                 <div>
-                  <h4 className="font-semibold text-gray-800 mb-2">Per Request Limit</h4>
-                  <p className="text-gray-700 leading-relaxed">
-                    All modes: Maximum 200 words per request for optimal processing quality.
+                  <h4 className="font-semibold text-gray-800 mb-2">Free Plan</h4>
+                  <p className="text-gray-700 leading-relaxed mb-2">
+                    Perfect for getting started with text humanization.
                   </p>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-800 mb-2">Monthly Limits (Anonymous Users)</h4>
-                  <ul className="list-disc list-inside text-gray-700 space-y-1">
-                    <li>Normal Mode: 500 words/month</li>
-                    <li>Power Mode: 200 words/month</li>
-                    <li>Paraphrase Mode: 1,000 words/month</li>
+                  <ul className="list-disc list-inside text-gray-700 space-y-1 text-sm">
+                    <li>Unlimited rewrites</li>
+                    <li>Normal tone only</li>
+                    <li>Community support</li>
+                    <li>Anonymous users: 500 Normal, 200 Power, 1,000 Paraphrase words/month</li>
                   </ul>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-800 mb-2">Monthly Limits (Registered Users)</h4>
-                  <ul className="list-disc list-inside text-gray-700 space-y-1">
-                    <li>Normal Mode: 10,000 words/month</li>
-                    <li>Power Mode: 2,000 words/month</li>
-                    <li>Paraphrase Mode: 10,000 words/month</li>
+                  <h4 className="font-semibold text-gray-800 mb-2">Pro Plan - $9/month</h4>
+                  <p className="text-gray-700 leading-relaxed mb-2">
+                    Advanced features for power users and professionals.
+                  </p>
+                  <ul className="list-disc list-inside text-gray-700 space-y-1 text-sm">
+                    <li>40,000 words humanize</li>
+                    <li>Unlimited rewrites</li>
+                    <li>20,000 words power</li>
+                    <li>All tone options</li>
+                    <li>Priority support</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-gray-800 mb-2">Professional Plan - $30/month</h4>
+                  <p className="text-gray-700 leading-relaxed mb-2">
+                    Ultimate plan for heavy users and businesses.
+                  </p>
+                  <ul className="list-disc list-inside text-gray-700 space-y-1 text-sm">
+                    <li>Unlimited humanize</li>
+                    <li>100,000 words power</li>
+                    <li>Unlimited rewrites</li>
+                    <li>All tone options</li>
+                    <li>Premium support</li>
                   </ul>
                 </div>
               </div>
