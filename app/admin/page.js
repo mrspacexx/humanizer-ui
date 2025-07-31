@@ -24,6 +24,8 @@ export default function AdminPanel() {
 
   const checkAdminStatus = async (token) => {
     try {
+      console.log("Checking admin status with token:", token ? "Token exists" : "No token");
+      
       // Try to fetch users - if we get 403, user is not admin
       const response = await fetch("https://g2ixr6izoi1zdq-8000.proxy.runpod.net/admin/users", {
         method: "GET",
@@ -32,6 +34,8 @@ export default function AdminPanel() {
           "Content-Type": "application/json"
         }
       });
+      
+      console.log("Admin check response status:", response.status);
       
       if (response.ok) {
         setIsAdmin(true);
@@ -43,10 +47,13 @@ export default function AdminPanel() {
         setError("Access denied. Admin privileges required.");
         setLoading(false);
       } else {
-        setError("Failed to verify admin status.");
+        const errorText = await response.text();
+        console.log("Admin check error response:", errorText);
+        setError(`Failed to verify admin status. Status: ${response.status}`);
         setLoading(false);
       }
     } catch (error) {
+      console.log("Admin check error:", error);
       setError("Connection error. Please try again.");
       setLoading(false);
     }
